@@ -24,7 +24,7 @@ final class DatabaseStore implements StoreInterface
     {
         $this->connection->table('heavy_jobs')->insert([
             'id' => $id,
-            'payload' => $serializedData,
+            'payload' => base64_encode($serializedData),
         ]);
     }
 
@@ -40,9 +40,11 @@ final class DatabaseStore implements StoreInterface
 
     private function getPayload(string $id): ?string
     {
-        return $this->connection->table('heavy_jobs')
+        $payload = $this->connection->table('heavy_jobs')
             ->where('id', $id)
             ->limit(1)
             ->value('payload');
+
+        return $payload ? base64_decode($payload) : null;
     }
 }
