@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueManagerDecorator;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
+use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
 use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeJob;
 use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
 
@@ -35,8 +36,10 @@ class HeavyJobsDispatchTest extends IntegrationTest
         $this->app['events']->listen(JobProcessed::class, function (JobProcessed $event) use ($key, $data) {
             $this->assertSame($data, Cache::get($key));
 
-            $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
-            $this->assertEmpty(HeavyJobsStore::get($heavyPayloadId));
+            $jobPayload = $event->job->payload();
+
+            $this->assertSame(HeavyJob::class, $jobPayload['data']['commandName']);
+            $this->assertEmpty(HeavyJobsStore::get($jobPayload['heavy-payload-id']));
         });
 
         FakeJob::dispatch($key, $data);
