@@ -96,7 +96,10 @@ class QueueDecorator implements Queue
 
     private function prepareJob($job)
     {
-        if ($job instanceof ShouldStorePayload) {
+        if (
+            $job instanceof ShouldStorePayload &&
+            (!method_exists($job, 'isHeavyJobsEnabled') || $job->isHeavyJobsEnabled())
+        ) {
             return new HeavyJob($job);
         }
 

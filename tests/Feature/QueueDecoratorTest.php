@@ -10,6 +10,7 @@ use Illuminate\Support\Testing\Fakes\QueueFake;
 use Mockery;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
+use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeConditionJob;
 use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeJob;
 use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
 
@@ -25,6 +26,15 @@ class QueueDecoratorTest extends IntegrationTest
     public function testQueueWrapHeavyJob()
     {
         Queue::push(new FakeJob('key', [1, 2, 3]));
+        Queue::assertPushed(HeavyJob::class);
+    }
+
+    public function testQueueWrapHeavyJobCondition()
+    {
+        Queue::push(new FakeConditionJob(false));
+        Queue::assertPushed(FakeConditionJob::class);
+
+        Queue::push(new FakeConditionJob(true));
         Queue::assertPushed(HeavyJob::class);
     }
 
