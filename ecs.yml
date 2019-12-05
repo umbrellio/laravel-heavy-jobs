@@ -1,0 +1,7 @@
+imports:
+  - { resource: '%vendor_dir%/umbrellio/code-style-php/umbrellio-cs.yml' }
+
+parameters:
+  skip:
+    Symplify\CodingStandard\Fixer\Solid\FinalInterfaceFixer:
+      - '*src/Decorators'

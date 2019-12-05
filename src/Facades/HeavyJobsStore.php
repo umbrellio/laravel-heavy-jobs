@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Umbrellio\LaravelHeavyJobs\Facades;
+
+use Illuminate\Support\Facades\Facade;
+use Umbrellio\LaravelHeavyJobs\Stores\PayloadStoreManager;
+
+/**
+ * @method static string store(string $id, $job)
+ * @method static mixed get(string $identifier)
+ * @method static void remove(string $identifier)
+ * @method static string generateId()
+ *
+ * @see PayloadStoreManager
+ */
+class HeavyJobsStore extends Facade
+{
+    protected static function getFacadeAccessor(): string
+    {
+        return 'heavy-jobs-store';
+    }
+}

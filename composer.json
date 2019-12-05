@@ -1,0 +1,56 @@
+{
+    "name": "umbrellio/laravel-heavy-jobs",
+    "description": "Позволяет отдельно хранить огромные данные задачи из очереди.",
+    "keywords": ["umbrellio", "laravel", "extension"],
+    "minimum-stability": "stable",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "lastbyte",
+            "email": "lastbyte@umbrellio.biz"
+        },
+        {
+            "name": "Umbrellio",
+            "email": "oss@umbrellio.biz"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Umbrellio\\LaravelHeavyJobs\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Umbrellio\\LaravelHeavyJobs\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "composer/composer": "^1.6",
+        "laravel/framework": "^5.8",
+        "sensiolabs/security-checker": "^6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.3",
+        "orchestra/testbench": "^3.8",
+        "josiasmontag/laravel-redis-mock": "^1.2",
+        "sensiolabs/security-checker": "^6.0",
+        "umbrellio/code-style-php": "^1.0"
+    },
+    "scripts": {
+        "lint":[
+            "vendor/bin/ecs check src tests -c ecs.yml"
+        ],
+        "test":[
+            "vendor/bin/phpunit --colors=never"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Umbrellio\\LaravelHeavyJobs\\HeavyJobsServiceProvider"
+            ]
+        }
+    }
+}
