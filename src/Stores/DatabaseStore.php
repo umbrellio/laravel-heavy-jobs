@@ -45,6 +45,6 @@ final class DatabaseStore implements StoreInterface
             ->limit(1)
             ->value('payload');
 
-        return $payload ? base64_decode($payload) : null;
+        return $payload ? base64_decode($payload, true) : null;
     }
 }
