@@ -27,7 +27,6 @@
     },
     "require": {
         "php": ">=7.2",
-        "composer/composer": "^1.6",
         "laravel/framework": "^5.8",
         "sensiolabs/security-checker": "^6.0"
     },
