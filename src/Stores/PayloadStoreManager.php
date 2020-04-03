@@ -24,7 +24,7 @@ class PayloadStoreManager
     public function get(string $identifier)
     {
         if (($serialized = $this->store->get($identifier)) === null) {
-            return [];
+            return null;
         }
 
         return unserialize($serialized);
