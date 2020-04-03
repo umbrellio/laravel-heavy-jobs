@@ -21,7 +21,7 @@ abstract class IntegrationTest extends TestCase
         return ['heavy-jobs-store' => PayloadStoreManager::class];
     }
 
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         $defaultConfig = include(__DIR__ . '/../config/heavy-jobs.php');
         foreach ($defaultConfig as $key => $value) {

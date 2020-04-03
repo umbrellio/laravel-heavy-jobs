@@ -37,19 +37,19 @@ final class HeavyJob
         return $this->job->{$name} ?? null;
     }
 
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         $this->job->{$name}($value);
     }
 
-    public function __sleep()
+    public function __sleep(): array
     {
         HeavyJobsStore::store($this->heavyPayloadId, $this->job);
 
         return ['heavyPayloadId'];
     }
 
-    public function __wakeup()
+    public function __wakeup(): void
     {
         $this->job = HeavyJobsStore::get($this->heavyPayloadId);
         $this->isPushed = true;

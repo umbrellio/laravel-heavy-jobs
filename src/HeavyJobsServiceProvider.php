@@ -54,14 +54,14 @@ class HeavyJobsServiceProvider extends ServiceProvider
             return [];
         });
 
-        $this->app['events']->listen(JobProcessed::class, function (JobProcessed $event) {
+        $this->app['events']->listen(JobProcessed::class, function (JobProcessed $event): void {
             if ($heavyPayloadId = Arr::get($event->job->payload(), 'heavy-payload-id')) {
                 HeavyJobsStore::remove($heavyPayloadId);
             }
         });
     }
 
-    private function registerCommands()
+    private function registerCommands(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([DatabaseStoreCommand::class]);

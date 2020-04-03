@@ -11,7 +11,7 @@ use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
 
 class HeavyJobTest extends IntegrationTest
 {
-    public function testJobSerialize()
+    public function testJobSerialize(): void
     {
         $fakeJob = new FakeJob('key', [1, 2, 3]);
         $job = new HeavyJob($fakeJob);
@@ -30,7 +30,7 @@ class HeavyJobTest extends IntegrationTest
         $this->assertInstanceOf(FakeJob::class, $storedJob);
     }
 
-    public function testJobDestructorClearData()
+    public function testJobDestructorClearData(): void
     {
         $callback = function ($fakeJob) {
             $job = new HeavyJob($fakeJob);

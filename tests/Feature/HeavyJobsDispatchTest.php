@@ -33,7 +33,7 @@ class HeavyJobsDispatchTest extends IntegrationTest
         $key = 'foo-bar';
         $data = ['foo' => 'bar'];
 
-        $this->app['events']->listen(JobProcessed::class, function (JobProcessed $event) use ($key, $data) {
+        $this->app['events']->listen(JobProcessed::class, function (JobProcessed $event) use ($key, $data): void {
             $this->assertSame($data, Cache::get($key));
 
             $jobPayload = $event->job->payload();

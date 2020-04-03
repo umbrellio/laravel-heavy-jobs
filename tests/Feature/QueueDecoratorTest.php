@@ -23,13 +23,13 @@ class QueueDecoratorTest extends IntegrationTest
         Queue::swap(new QueueDecorator(new QueueFake($this->app)));
     }
 
-    public function testQueueWrapHeavyJob()
+    public function testQueueWrapHeavyJob(): void
     {
         Queue::push(new FakeJob('key', [1, 2, 3]));
         Queue::assertPushed(HeavyJob::class);
     }
 
-    public function testQueueWrapHeavyJobCondition()
+    public function testQueueWrapHeavyJobCondition(): void
     {
         Queue::push(new FakeConditionJob(false));
         Queue::assertPushed(FakeConditionJob::class);
@@ -38,7 +38,7 @@ class QueueDecoratorTest extends IntegrationTest
         Queue::assertPushed(HeavyJob::class);
     }
 
-    public function testQueueMarkHeavyJob()
+    public function testQueueMarkHeavyJob(): void
     {
         Queue::push(new FakeJob('key', [1, 2, 3]));
         Queue::assertPushed(HeavyJob::class, function (HeavyJob $job) {
@@ -48,7 +48,7 @@ class QueueDecoratorTest extends IntegrationTest
         });
     }
 
-    public function testQueueNotWrapCommonJob()
+    public function testQueueNotWrapCommonJob(): void
     {
         $job = Mockery::mock(Job::class);
 

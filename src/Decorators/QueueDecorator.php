@@ -8,9 +8,9 @@ use Illuminate\Contracts\Queue\Queue;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
 use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;
 
-class QueueDecorator implements Queue
+final class QueueDecorator implements Queue
 {
-    protected $queue;
+    private $queue;
 
     public function __construct(Queue $queue)
     {
@@ -31,7 +31,7 @@ class QueueDecorator implements Queue
     {
         $job = $this->prepareJob($job);
 
-        return tap($this->queue->push($job, $data, $queue), function () use ($job) {
+        return tap($this->queue->push($job, $data, $queue), function () use ($job): void {
             $this->markJobs([$job]);
         });
     }
@@ -45,7 +45,7 @@ class QueueDecorator implements Queue
     {
         $job = $this->prepareJob($job);
 
-        return tap($this->queue->pushOn($queue, $job, $data), function () use ($job) {
+        return tap($this->queue->pushOn($queue, $job, $data), function () use ($job): void {
             $this->markJobs([$job]);
         });
     }
@@ -54,7 +54,7 @@ class QueueDecorator implements Queue
     {
         $job = $this->prepareJob($job);
 
-        return tap($this->queue->later($delay, $job, $data, $queue), function () use ($job) {
+        return tap($this->queue->later($delay, $job, $data, $queue), function () use ($job): void {
             $this->markJobs([$job]);
         });
     }
@@ -63,7 +63,7 @@ class QueueDecorator implements Queue
     {
         $job = $this->prepareJob($job);
 
-        return tap($this->queue->laterOn($queue, $delay, $job, $data), function () use ($job) {
+        return tap($this->queue->laterOn($queue, $delay, $job, $data), function () use ($job): void {
             $this->markJobs([$job]);
         });
     }
@@ -72,7 +72,7 @@ class QueueDecorator implements Queue
     {
         $jobs = $this->prepareJobs($jobs);
 
-        return tap($this->queue->bulk($jobs, $data, $queue), function () use ($jobs) {
+        return tap($this->queue->bulk($jobs, $data, $queue), function () use ($jobs): void {
             $this->markJobs($jobs);
         });
     }

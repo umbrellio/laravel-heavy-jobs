@@ -12,7 +12,8 @@ use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;
 
 final class FakeJob implements ShouldQueue, ShouldStorePayload
 {
-    use Queueable, Dispatchable;
+    use Queueable;
+    use Dispatchable;
 
     private $key;
     private $data;

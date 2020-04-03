@@ -12,7 +12,7 @@ use Illuminate\Queue\QueueManager;
 /**
  * @todo
  * До версии 6.0, у worker'ов указан тайп-хин QueueManager, по этому нельзя использовать обычный декоратор.
- * Когда пакет будет адапатирован под версию 6.0, можно будет использовать нормальный декоратор а не этот хак...
+ * Когда пакет будет разделен под версию 6.0, можно будет использовать нормальный декоратор а не этот хак...
  *
  * @mixin QueueManager
  */
@@ -39,7 +39,7 @@ class QueueManagerDecorator extends QueueManager
         return $this->connections[$name];
     }
 
-    public function addConnector($driver, Closure $resolver)
+    public function addConnector($driver, Closure $resolver): void
     {
         $this->manger->addConnector($driver, $resolver);
     }
