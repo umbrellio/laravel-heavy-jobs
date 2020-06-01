@@ -27,39 +27,6 @@ final class HeavyJob
         }
     }
 
-    public function __clone()
-    {
-        $this->pushed();
-    }
-
-    public function __get($name)
-    {
-        return $this->job->{$name} ?? null;
-    }
-
-    public function __set($name, $value): void
-    {
-        $this->job->{$name}($value);
-    }
-
-    public function __sleep(): array
-    {
-        HeavyJobsStore::store($this->heavyPayloadId, $this->job);
-
-        return ['heavyPayloadId'];
-    }
-
-    public function __wakeup(): void
-    {
-        $this->job = HeavyJobsStore::get($this->heavyPayloadId);
-        $this->isPushed = true;
-    }
-
-    public function __call($name, $arguments)
-    {
-        return $this->job->{$name}(...$arguments);
-    }
-
     public function handle(QueueingDispatcher $dispatcher)
     {
         return $dispatcher->dispatchNow($this->job);
@@ -92,5 +59,38 @@ final class HeavyJob
     public function isPushed(): bool
     {
         return $this->isPushed;
+    }
+
+    public function __clone()
+    {
+        $this->pushed();
+    }
+
+    public function __get($name)
+    {
+        return $this->job->{$name} ?? null;
+    }
+
+    public function __set($name, $value): void
+    {
+        $this->job->{$name}($value);
+    }
+
+    public function __sleep(): array
+    {
+        HeavyJobsStore::store($this->heavyPayloadId, $this->job);
+
+        return ['heavyPayloadId'];
+    }
+
+    public function __wakeup(): void
+    {
+        $this->job = HeavyJobsStore::get($this->heavyPayloadId);
+        $this->isPushed = true;
+    }
+
+    public function __call($name, $arguments)
+    {
+        return $this->job->{$name}(...$arguments);
     }
 }
