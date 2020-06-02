@@ -22,15 +22,17 @@ use Umbrellio\LaravelHeavyJobs\Stores\StoreResolver;
 
 class HeavyJobsServiceProvider extends ServiceProvider
 {
+    private const CONFIG_FILE = __DIR__ . '/../config/heavy-jobs.php';
+
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__ . '/../config/heavy-jobs.php' => config_path('heavy-jobs.php'),
-        ], ['heavy-jobs-config']);
+        $this->publishes([self::CONFIG_FILE => config_path('heavy-jobs.php')], ['heavy-jobs-config']);
     }
 
     public function register(): void
     {
+        $this->mergeConfigFrom(self::CONFIG_FILE, 'heavy-jobs');
+
         $this->app->singleton(StoreResolver::class);
 
         $this->app->singleton('heavy-jobs-store', function (Application $app) {

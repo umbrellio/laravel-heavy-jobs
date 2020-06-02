@@ -33,8 +33,6 @@ abstract class IntegrationTest extends TestCase
 
     protected function getEnvironmentSetUp($app): void
     {
-        $app['config']->set('heavy-jobs.driver', 'redis');
-        $app['config']->set('heavy-jobs.parameters.connection', 'default');
         $app['config']->set('queue.default', 'sync');
         $app['config']->set('queue.failed', null);
     }
