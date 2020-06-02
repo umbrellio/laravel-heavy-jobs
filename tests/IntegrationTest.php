@@ -4,12 +4,23 @@ declare(strict_types=1);
 
 namespace Umbrellio\LaravelHeavyJobs\Tests;
 
+use Illuminate\Support\Facades\Redis;
 use Orchestra\Testbench\TestCase;
 use Umbrellio\LaravelHeavyJobs\HeavyJobsServiceProvider;
 use Umbrellio\LaravelHeavyJobs\Stores\PayloadStoreManager;
+use Umbrellio\LaravelHeavyJobs\Stores\RedisStore;
 
 abstract class IntegrationTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        // автоматически очищаем данные, после каждого теста.
+        Redis::del(RedisStore::JOBS_HASH_KEY);
+        Redis::del(RedisStore::FAILED_JOBS_HASH_KEY);
+
+        parent::tearDown();
+    }
+
     protected function getPackageProviders($app): array
     {
         return [HeavyJobsServiceProvider::class];
@@ -22,11 +33,8 @@ abstract class IntegrationTest extends TestCase
 
     protected function getEnvironmentSetUp($app): void
     {
-        $defaultConfig = include(__DIR__ . '/../config/heavy-jobs.php');
-        foreach ($defaultConfig as $key => $value) {
-            $app['config']->set("heavy-jobs.{$key}", $value);
-        }
-
+        $app['config']->set("heavy-jobs.driver", 'redis');
+        $app['config']->set("heavy-jobs.parameters.connection", 'default');
         $app['config']->set('queue.default', 'sync');
         $app['config']->set('queue.failed', null);
     }

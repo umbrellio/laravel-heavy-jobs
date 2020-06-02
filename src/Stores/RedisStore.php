@@ -9,8 +9,8 @@ use Umbrellio\LaravelHeavyJobs\Stores\Helpers\LuaScripts;
 
 final class RedisStore implements StoreInterface
 {
-    private const JOBS_HASH_KEY = 'heavy_job_payloads';
-    private const FAILED_JOBS_HASH_KEY = 'failed_heavy_job_payloads';
+    public const JOBS_HASH_KEY = 'heavy_job_payloads';
+    public const FAILED_JOBS_HASH_KEY = 'failed_heavy_job_payloads';
 
     private $connection;
 
