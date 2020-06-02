@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Umbrellio\LaravelHeavyJobs\Tests;
 
-use Lunaweb\RedisMock\Providers\RedisMockServiceProvider;
 use Orchestra\Testbench\TestCase;
 use Umbrellio\LaravelHeavyJobs\HeavyJobsServiceProvider;
 use Umbrellio\LaravelHeavyJobs\Stores\PayloadStoreManager;
@@ -13,7 +12,7 @@ abstract class IntegrationTest extends TestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [HeavyJobsServiceProvider::class, RedisMockServiceProvider::class];
+        return [HeavyJobsServiceProvider::class];
     }
 
     protected function getPackageAliases($app): array
@@ -29,6 +28,6 @@ abstract class IntegrationTest extends TestCase
         }
 
         $app['config']->set('queue.default', 'sync');
-        $app['config']->set('database.redis.client', 'mock');
+        $app['config']->set('queue.failed', null);
     }
 }

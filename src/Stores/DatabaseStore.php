@@ -20,9 +20,9 @@ final class DatabaseStore implements StoreInterface
         return $this->getPayload($id);
     }
 
-    public function set(string $id, string $serializedData): void
+    public function set(string $id, string $serializedData): bool
     {
-        $this->connection->table('heavy_jobs')->insert([
+        return $this->connection->table('heavy_jobs')->insert([
             'id' => $id,
             'payload' => base64_encode($serializedData),
         ]);
@@ -36,6 +36,20 @@ final class DatabaseStore implements StoreInterface
     public function remove(string $id): bool
     {
         return $this->connection->table('heavy_jobs')->delete($id) > 0;
+    }
+
+    public function markAsFailed(string $id): bool
+    {
+        return $this->connection->table('heavy_jobs')
+                ->where('id', $id)
+                ->update(['is_failed' => 1]) > 0;
+    }
+
+    public function flushFailed(): bool
+    {
+        return $this->connection->table('heavy_jobs')
+            ->where('is_failed', 1)
+            ->delete() > 0;
     }
 
     private function getPayload(string $id): ?string

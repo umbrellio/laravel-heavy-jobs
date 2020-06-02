@@ -23,7 +23,7 @@ class HeavyJobTest extends IntegrationTest
         $processingJob = unserialize($serialized);
         $this->assertSame($processingJob->getJob()->getKey(), $fakeJob->getKey());
         $this->assertSame($processingJob->getJob()->getData(), $fakeJob->getData());
-        $this->assertTrue($processingJob->isPushed());
+        $this->assertFalse($processingJob->IsHandlePayloadRemove());
         $this->assertSame($processingJob->getHeavyPayloadId(), $job->getHeavyPayloadId());
 
         $storedJob = HeavyJobsStore::get($job->getHeavyPayloadId());
@@ -33,7 +33,7 @@ class HeavyJobTest extends IntegrationTest
     public function testJobDestructorClearData(): void
     {
         $callback = function ($fakeJob) {
-            $job = new HeavyJob($fakeJob);
+            $job = new HeavyJob($fakeJob, true);
 
             serialize($job);
 

@@ -7,11 +7,13 @@ namespace Umbrellio\LaravelHeavyJobs;
 use Illuminate\Contracts\Queue\Factory as QueueFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Queue\Failed\FailedJobProviderInterface;
 use Illuminate\Queue\Queue;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Umbrellio\LaravelHeavyJobs\Console\DatabaseStoreCommand;
+use Umbrellio\LaravelHeavyJobs\Decorators\FailedJobProviderDecorator;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueManagerDecorator;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
@@ -37,6 +39,10 @@ class HeavyJobsServiceProvider extends ServiceProvider
 
         $this->app->extend(QueueFactory::class, function (QueueManager $manager, Application $app) {
             return new QueueManagerDecorator($manager, $app);
+        });
+
+        $this->app->extend(FailedJobProviderInterface::class, function (FailedJobProviderInterface $provider) {
+            return new FailedJobProviderDecorator($provider);
         });
 
         $this->registerPayloadCleaner();

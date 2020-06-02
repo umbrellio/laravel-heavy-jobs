@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Stores;
 
 use Illuminate\Redis\RedisManager;
+use Umbrellio\LaravelHeavyJobs\Stores\Helpers\LuaScripts;
 
 final class RedisStore implements StoreInterface
 {
+    private const JOBS_HASH_KEY = 'heavy_job_payloads';
+    private const FAILED_JOBS_HASH_KEY = 'failed_heavy_job_payloads';
+
     private $connection;
 
     public function __construct(?string $connection, RedisManager $redis)
@@ -17,29 +21,41 @@ final class RedisStore implements StoreInterface
 
     public function get(string $id): ?string
     {
-        return $this->doCommand('GET', $id);
+        return $this->connection->eval(
+            LuaScripts::get(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
+        ) ?: null;
     }
 
-    public function set(string $id, string $serializedData): void
+    public function set(string $id, string $serializedData): bool
     {
-        $this->doCommand('SET', $id, $serializedData);
+        return (bool)$this->connection->eval(
+            LuaScripts::set(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id, $serializedData
+        );
     }
 
     public function has(string $id): bool
     {
-        return (bool) $this->doCommand('EXISTS', $id);
+        return (bool)$this->connection->eval(
+            LuaScripts::has(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
+        );
     }
 
     public function remove(string $id): bool
     {
-        return (bool) $this->doCommand('DEL', $id);
+        return (bool)$this->connection->eval(
+            LuaScripts::remove(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
+        );
     }
 
-    private function doCommand(string $command, string $id, ...$args)
+    public function markAsFailed(string $id): bool
     {
-        $key = "heavy-jobs:{$id}";
-        array_unshift($args, $key);
+        return (bool)$this->connection->eval(
+            LuaScripts::markAsFailed(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
+        );
+    }
 
-        return $this->connection->command($command, $args);
+    public function flushFailed(): bool
+    {
+        return (bool)$this->connection->del(self::FAILED_JOBS_HASH_KEY);
     }
 }

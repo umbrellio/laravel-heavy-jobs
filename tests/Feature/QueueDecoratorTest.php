@@ -42,7 +42,7 @@ class QueueDecoratorTest extends IntegrationTest
     {
         Queue::push(new FakeJob('key', [1, 2, 3]));
         Queue::assertPushed(HeavyJob::class, function (HeavyJob $job) {
-            $this->assertTrue($job->isPushed());
+            $this->assertFalse($job->IsHandlePayloadRemove());
 
             return true;
         });

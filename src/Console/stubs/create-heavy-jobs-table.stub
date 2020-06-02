@@ -13,6 +13,7 @@ class CreateHeavyJobsTable extends Migration
         Schema::create('heavy_jobs', function (Blueprint $table) {
             $table->string('id')->unique()->index();
             $table->longText('payload');
+            $table->smallInteger('is_failed')->index();
         });
     }
 

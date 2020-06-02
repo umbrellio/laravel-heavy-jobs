@@ -100,7 +100,7 @@ final class QueueDecorator implements Queue
             $job instanceof ShouldStorePayload &&
             (!method_exists($job, 'isHeavyJobsEnabled') || $job->isHeavyJobsEnabled())
         ) {
-            return new HeavyJob($job);
+            return new HeavyJob($job, true);
         }
 
         return $job;
@@ -110,7 +110,7 @@ final class QueueDecorator implements Queue
     {
         foreach ($jobs as $job) {
             if ($job instanceof HeavyJob) {
-                $job->pushed();
+                $job->disablePayloadRemove();
             }
         }
     }

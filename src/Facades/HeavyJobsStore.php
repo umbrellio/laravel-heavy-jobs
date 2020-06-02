@@ -11,6 +11,8 @@ use Umbrellio\LaravelHeavyJobs\Stores\PayloadStoreManager;
  * @method static string store(string $id, $job)
  * @method static mixed get(string $identifier)
  * @method static void remove(string $identifier)
+ * @method static void markAsFailed(string $identifier)
+ * @method static void flushFailed()
  * @method static string generateId()
  *
  * @see PayloadStoreManager
