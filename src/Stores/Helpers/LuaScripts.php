@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\LaravelHeavyJobs\Stores\Helpers;
 
 final class LuaScripts

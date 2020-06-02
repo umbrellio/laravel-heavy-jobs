@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
 
 use Illuminate\Queue\Events\JobFailed;
+use Throwable;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
 use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeFailedJob;
 use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeFailedJobProvider;
 use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
-use \Throwable;
 
 class FailedJobProviderDecoratorTest extends IntegrationTest
 {
@@ -22,7 +22,7 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
 
     public function testForget(): void
     {
-        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$heavyPayloadId, &$logId) {
+        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$heavyPayloadId, &$logId): void {
             $logId = $this->logFailedJob($event);
             $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
         });
@@ -39,7 +39,7 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
     public function testFlush(): void
     {
         $ids = [];
-        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$ids) {
+        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$ids): void {
             $this->logFailedJob($event);
 
             $ids[] = $event->job->payload()['heavy-payload-id'];
@@ -73,7 +73,7 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
     {
         try {
             FakeFailedJob::dispatch($data);
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             // ignore exception;
         }
     }

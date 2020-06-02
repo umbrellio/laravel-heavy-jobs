@@ -17,6 +17,11 @@ final class FailedJobProviderDecorator implements FailedJobProviderInterface
         $this->failedJobProvider = $failedJobProvider;
     }
 
+    public function __call($name, $arguments)
+    {
+        return $this->failedJobProvider->{$name}(...$arguments);
+    }
+
     public function log($connection, $queue, $payload, $exception)
     {
         return $this->failedJobProvider->log($connection, $queue, $payload, $exception);
@@ -44,15 +49,10 @@ final class FailedJobProviderDecorator implements FailedJobProviderInterface
         return $this->failedJobProvider->forget($id);
     }
 
-    public function flush()
+    public function flush(): void
     {
         HeavyJobsStore::flushFailed();
 
         $this->failedJobProvider->flush();
-    }
-
-    public function __call($name, $arguments)
-    {
-        return $this->failedJobProvider->{$name}(...$arguments);
     }
 }

@@ -41,8 +41,8 @@ final class DatabaseStore implements StoreInterface
     public function markAsFailed(string $id): bool
     {
         return $this->connection->table('heavy_jobs')
-                ->where('id', $id)
-                ->update(['is_failed' => 1]) > 0;
+            ->where('id', $id)
+            ->update(['is_failed' => 1]) > 0;
     }
 
     public function flushFailed(): bool

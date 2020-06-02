@@ -28,34 +28,34 @@ final class RedisStore implements StoreInterface
 
     public function set(string $id, string $serializedData): bool
     {
-        return (bool)$this->connection->eval(
+        return (bool) $this->connection->eval(
             LuaScripts::set(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id, $serializedData
         );
     }
 
     public function has(string $id): bool
     {
-        return (bool)$this->connection->eval(
+        return (bool) $this->connection->eval(
             LuaScripts::has(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
         );
     }
 
     public function remove(string $id): bool
     {
-        return (bool)$this->connection->eval(
+        return (bool) $this->connection->eval(
             LuaScripts::remove(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
         );
     }
 
     public function markAsFailed(string $id): bool
     {
-        return (bool)$this->connection->eval(
+        return (bool) $this->connection->eval(
             LuaScripts::markAsFailed(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
         );
     }
 
     public function flushFailed(): bool
     {
-        return (bool)$this->connection->del(self::FAILED_JOBS_HASH_KEY);
+        return (bool) $this->connection->del(self::FAILED_JOBS_HASH_KEY);
     }
 }

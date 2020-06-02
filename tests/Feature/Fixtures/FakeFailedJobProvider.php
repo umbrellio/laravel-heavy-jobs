@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures;
 
 use Illuminate\Queue\Failed\FailedJobProviderInterface;
-use \StdClass;
+use StdClass;
 
 final class FakeFailedJobProvider implements FailedJobProviderInterface
 {
@@ -13,7 +13,7 @@ final class FakeFailedJobProvider implements FailedJobProviderInterface
 
     public function log($connection, $queue, $payload, $exception)
     {
-        $record = new StdClass;
+        $record = new StdClass();
         $record->connection = $connection;
         $record->queue = $queue;
         $record->payload = $payload;
@@ -34,12 +34,12 @@ final class FakeFailedJobProvider implements FailedJobProviderInterface
         return $this->records[$id] ?? null;
     }
 
-    public function forget($id)
+    public function forget($id): void
     {
         unset($this->records[$id]);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->records = [];
     }

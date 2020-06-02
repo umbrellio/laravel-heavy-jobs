@@ -6,6 +6,7 @@ namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
 
 use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Support\Facades\Cache;
+use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueManagerDecorator;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
@@ -13,7 +14,6 @@ use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
 use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeFailedJob;
 use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeJob;
 use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
-use RuntimeException;
 
 class HeavyJobsDispatchTest extends IntegrationTest
 {
