@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
 
 use Illuminate\Queue\Events\JobProcessed;
-use Illuminate\Support\Facades\Cache;
 use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueManagerDecorator;
@@ -17,11 +16,6 @@ use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
 
 class HeavyJobsDispatchTest extends IntegrationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function testDecoratorIntegration(): void
     {
         /** @var QueueManagerDecorator $queueManager */
@@ -32,11 +26,10 @@ class HeavyJobsDispatchTest extends IntegrationTest
 
     public function testStoreQueuePayload(): void
     {
-        $key = 'foo-bar';
-        $data = ['foo' => 'bar'];
+        $workName = 'foo';
 
-        $this->app['events']->listen(JobProcessed::class, function (JobProcessed $event) use ($key, $data): void {
-            $this->assertSame($data, Cache::get($key));
+        $this->app['events']->listen(JobProcessed::class, function (JobProcessed $event) use ($workName): void {
+            $this->assertTrue($this->workRepository->getWork($workName)->isCompleted());
 
             $jobPayload = $event->job->payload();
 
@@ -44,18 +37,16 @@ class HeavyJobsDispatchTest extends IntegrationTest
             $this->assertEmpty(HeavyJobsStore::get($jobPayload['heavy-payload-id']));
         });
 
-        FakeJob::dispatch($key, $data);
+        FakeJob::dispatch($workName);
     }
 
     public function testMarkAsFailed(): void
     {
-        $data = ['foo' => 'bar'];
-
         HeavyJobsStore::spy()
-            ->shouldReceive('get')->andReturn(new FakeFailedJob($data))
+            ->shouldReceive('get')->andReturn(new FakeFailedJob())
             ->shouldReceive('markAsFailed')->once();
 
         $this->expectExceptionObject(new RuntimeException('Some exception.'));
-        FakeFailedJob::dispatch($data);
+        FakeFailedJob::dispatch();
     }
 }

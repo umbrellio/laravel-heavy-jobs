@@ -15,18 +15,6 @@ final class FakeFailedJob implements ShouldQueue, ShouldStorePayload
     use Queueable;
     use Dispatchable;
 
-    private $data;
-
-    public function __construct(array $data)
-    {
-        $this->data = $data;
-    }
-
-    public function getData()
-    {
-        return $this->data;
-    }
-
     public function handle(): void
     {
         throw new RuntimeException('Some exception.');

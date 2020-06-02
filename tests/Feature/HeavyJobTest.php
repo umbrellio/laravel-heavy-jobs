@@ -13,7 +13,7 @@ class HeavyJobTest extends IntegrationTest
 {
     public function testJobSerialize(): void
     {
-        $fakeJob = new FakeJob('key', [1, 2, 3]);
+        $fakeJob = new FakeJob('foo');
         $job = new HeavyJob($fakeJob);
 
         $serialized = serialize(clone $job);
@@ -21,8 +21,7 @@ class HeavyJobTest extends IntegrationTest
 
         /** @var HeavyJob $processingJob */
         $processingJob = unserialize($serialized);
-        $this->assertSame($processingJob->getJob()->getKey(), $fakeJob->getKey());
-        $this->assertSame($processingJob->getJob()->getData(), $fakeJob->getData());
+        $this->assertSame($processingJob->getJob()->getWorkName(), $fakeJob->getWorkName());
         $this->assertFalse($processingJob->IsHandlePayloadRemove());
         $this->assertSame($processingJob->getHeavyPayloadId(), $job->getHeavyPayloadId());
 
@@ -41,7 +40,7 @@ class HeavyJobTest extends IntegrationTest
 
             return $job->getHeavyPayloadId();
         };
-        $payloadId = $callback(new FakeJob('key', [1, 2, 3]));
+        $payloadId = $callback(new FakeJob('foo'));
 
         $this->assertEmpty(HeavyJobsStore::get($payloadId));
     }

@@ -9,9 +9,23 @@ use Orchestra\Testbench\TestCase;
 use Umbrellio\LaravelHeavyJobs\HeavyJobsServiceProvider;
 use Umbrellio\LaravelHeavyJobs\Stores\PayloadStoreManager;
 use Umbrellio\LaravelHeavyJobs\Stores\RedisStore;
+use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\Work\WorkRepository;
 
 abstract class IntegrationTest extends TestCase
 {
+    /** @var WorkRepository */
+    protected $workRepository;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->workRepository = new WorkRepository();
+        $this->app->singleton(WorkRepository::class, function () {
+            return $this->workRepository;
+        });
+    }
+
     protected function tearDown(): void
     {
         // автоматически очищаем данные, после каждого теста.
