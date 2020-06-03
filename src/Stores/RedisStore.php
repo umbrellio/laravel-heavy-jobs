@@ -21,9 +21,7 @@ final class RedisStore implements StoreInterface
     public function __construct(?string $connection, RedisManager $redis)
     {
         $this->connection = $redis->connection($connection);
-        if (($this->lifetime = config('heavy-jobs.failed_job_lifetime', -1)) !== -1) {
-            $this->lifetime *= 60;
-        }
+        $this->lifetime = config('heavy-jobs.failed_job_lifetime', -1);
     }
 
     public function get(string $id): ?string
@@ -67,7 +65,7 @@ final class RedisStore implements StoreInterface
 
     public function remove(string $id): bool
     {
-        return (bool) $this->connection->del(self::JOB_PAYLOADS_KEY, $id);
+        return (bool) $this->connection->hdel(self::JOB_PAYLOADS_KEY, $id);
     }
 
     public function removeFailed(string $id): bool

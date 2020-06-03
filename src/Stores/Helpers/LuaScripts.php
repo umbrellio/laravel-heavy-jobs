@@ -10,10 +10,10 @@ final class LuaScripts
      * Возвращает сохраненный payload.
      *
      * KEYS[1] - ключ хеш-хранилища job'ок.
-     * KEYS[2] - ключ хеш-хранилища job'ок завершившихся ошибкой.
-     * ARGV[1] - id payload'a
+     * KEYS[2] - ключ хеш-хранилища неудавшихся job'ок.
+     * ARGV[1] - id payload'a.
      *
-     * @return string
+     * @return string сохраненный payload job'ки.
      */
     public static function get()
     {
@@ -28,13 +28,13 @@ LUA;
     }
 
     /**
-     * Перемещает payload в хеш-хранилище job'ок завершившихся ошибкой.
+     * Перемещает payload в хеш-хранилище неудавшихся job'ок.
      *
      * KEYS[1] - ключ хеш-хранилища job'ок.
-     * KEYS[2] - ключ хеш-хранилища job'ок завершившихся ошибкой.
-     * ARGV[1] - id payload'а
+     * KEYS[2] - ключ хеш-хранилища неудавшихся job'ок.
+     * ARGV[1] - id payload'а.
      *
-     * @return string
+     * @return int 1 в случае успешного перемещения job'ки, иначе 0.
      */
     public static function markAsFailed()
     {

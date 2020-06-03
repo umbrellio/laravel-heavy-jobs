@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
 
+use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Queue\Events\JobProcessed;
 use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
@@ -48,5 +49,56 @@ class HeavyJobsDispatchTest extends IntegrationTest
 
         $this->expectExceptionObject(new RuntimeException('Some exception.'));
         FakeFailedJob::dispatch();
+    }
+
+    public function testLifetime(): void
+    {
+        config(['heavy-jobs.failed_job_lifetime' => 1]);
+
+        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$heavyPayloadId): void {
+            $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
+        });
+
+        $this->dispatchJobIgnoreException();
+
+        $this->assertNotEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
+
+        sleep(1);
+        // при вызове get, произойдет очистка таймаута.
+        HeavyJobsStore::get('non-exists-id');
+
+        $this->assertEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
+
+        config(['heavy-jobs.failed_job_lifetime' => -1]);
+    }
+
+    public function testPersistsLifetime(): void
+    {
+        config(['heavy-jobs.failed_job_lifetime' => -1]);
+
+        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$heavyPayloadId): void {
+            $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
+        });
+
+        $this->dispatchJobIgnoreException();
+
+        $this->assertNotEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
+
+        sleep(1);
+        // при вызове get, произойдет очистка таймаута.
+        HeavyJobsStore::get('non-exists-id');
+
+        $this->assertNotEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
+    }
+
+    private function dispatchJobIgnoreException(): void
+    {
+        try {
+            FakeFailedJob::dispatch();
+        } catch (RuntimeException $runtimeException) {
+            if ($runtimeException->getMessage() !== 'Some exception.') {
+                throw $runtimeException;
+            }
+        }
     }
 }

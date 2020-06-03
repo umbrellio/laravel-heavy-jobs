@@ -27,7 +27,7 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
             $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
         });
 
-        $this->dispatchJobIgnoreException(['foo' => 'bar']);
+        $this->dispatchJobIgnoreException();
 
         $this->assertNotEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
 
@@ -45,9 +45,9 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
             $ids[] = $event->job->payload()['heavy-payload-id'];
         });
 
-        $this->dispatchJobIgnoreException(['foo' => 1]);
-        $this->dispatchJobIgnoreException(['bar' => 2]);
-        $this->dispatchJobIgnoreException(['baz' => 3]);
+        $this->dispatchJobIgnoreException();
+        $this->dispatchJobIgnoreException();
+        $this->dispatchJobIgnoreException();
 
         foreach ($ids as $id) {
             $this->assertNotEmpty(HeavyJobsStore::getFailed($id));
@@ -69,10 +69,10 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
         );
     }
 
-    private function dispatchJobIgnoreException(array $data): void
+    private function dispatchJobIgnoreException(): void
     {
         try {
-            FakeFailedJob::dispatch($data);
+            FakeFailedJob::dispatch();
         } catch (RuntimeException $runtimeException) {
             if ($runtimeException->getMessage() !== 'Some exception.') {
                 throw $runtimeException;
