@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Umbrellio\LaravelHeavyJobs\Decorators;
 
-use Throwable;
 use Illuminate\Contracts\Queue\Queue;
+use Throwable;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
 use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;
 

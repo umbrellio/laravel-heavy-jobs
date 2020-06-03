@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Stores;
 
 use Carbon\Carbon;
+use function count;
 use Illuminate\Redis\RedisManager;
 use Umbrellio\LaravelHeavyJobs\Stores\Helpers\LuaScripts;
-use function \count;
 
 final class RedisStore implements StoreInterface
 {
@@ -28,15 +28,15 @@ final class RedisStore implements StoreInterface
     {
         $score = $this->lifetime !== -1 ? Carbon::now()->getTimestamp() : 0;
 
-        [$payload, $ids] = $this->connection->pipeline(function ($pipe) use ($id, $score) {
+        [$payload, $ids] = $this->connection->pipeline(function ($pipe) use ($id, $score): void {
             $pipe->eval(LuaScripts::get(), [self::JOB_PAYLOADS_KEY, self::FAILED_JOB_PAYLOADS_KEY, $id], 2);
-            $pipe->zrangebyscore(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, '-inf', (string)$score);
+            $pipe->zrangebyscore(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, '-inf', (string) $score);
         });
 
         if (count($ids)) {
-            $this->connection->pipeline(function ($pipe) use ($ids, $score) {
+            $this->connection->pipeline(function ($pipe) use ($ids, $score): void {
                 $pipe->hdel(self::FAILED_JOB_PAYLOADS_KEY, ...$ids);
-                $pipe->zremrangebyscore(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, '-inf', (string)$score);
+                $pipe->zremrangebyscore(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, '-inf', (string) $score);
             });
         }
 
@@ -50,7 +50,7 @@ final class RedisStore implements StoreInterface
 
     public function set(string $id, string $serializedData): bool
     {
-        [$set] = $this->connection->pipeline(function ($pipe) use ($id, $serializedData) {
+        [$set] = $this->connection->pipeline(function ($pipe) use ($id, $serializedData): void {
             $pipe->hset(self::JOB_PAYLOADS_KEY, $id, $serializedData);
             $pipe->zrem(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, $id);
         });
@@ -70,7 +70,7 @@ final class RedisStore implements StoreInterface
 
     public function removeFailed(string $id): bool
     {
-        [$deleted] = $this->connection->pipeline(function ($pipe) use ($id) {
+        [$deleted] = $this->connection->pipeline(function ($pipe) use ($id): void {
             $pipe->hdel(self::FAILED_JOB_PAYLOADS_KEY, $id);
             $pipe->zrem(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, $id);
         });
@@ -80,7 +80,7 @@ final class RedisStore implements StoreInterface
 
     public function markAsFailed(string $id): bool
     {
-        [$marked] = $this->connection->pipeline(function ($pipe) use ($id) {
+        [$marked] = $this->connection->pipeline(function ($pipe) use ($id): void {
             $pipe->eval(LuaScripts::markAsFailed(), [self::JOB_PAYLOADS_KEY, self::FAILED_JOB_PAYLOADS_KEY, $id], 2);
             $pipe->zadd(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, Carbon::now()->getTimestamp() + $this->lifetime, $id);
         });
@@ -90,7 +90,7 @@ final class RedisStore implements StoreInterface
 
     public function flushFailed(): bool
     {
-        $result = $this->connection->pipeline(function ($pipe) {
+        $result = $this->connection->pipeline(function ($pipe): void {
             $pipe->del(self::FAILED_JOB_PAYLOADS_KEY);
             $pipe->del(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY);
         });
