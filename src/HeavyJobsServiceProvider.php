@@ -12,7 +12,6 @@ use Illuminate\Queue\Queue;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
-use Umbrellio\LaravelHeavyJobs\Console\DatabaseStoreCommand;
 use Umbrellio\LaravelHeavyJobs\Decorators\FailedJobProviderDecorator;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueManagerDecorator;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
@@ -48,7 +47,6 @@ class HeavyJobsServiceProvider extends ServiceProvider
         });
 
         $this->registerPayloadCleaner();
-        $this->registerCommands();
     }
 
     private function registerPayloadCleaner(): void
@@ -67,12 +65,5 @@ class HeavyJobsServiceProvider extends ServiceProvider
                 HeavyJobsStore::remove($heavyPayloadId);
             }
         });
-    }
-
-    private function registerCommands(): void
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands([DatabaseStoreCommand::class]);
-        }
     }
 }

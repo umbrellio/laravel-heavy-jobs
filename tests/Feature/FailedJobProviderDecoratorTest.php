@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
 
 use Illuminate\Queue\Events\JobFailed;
-use Throwable;
+use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
 use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeFailedJob;
 use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeFailedJobProvider;
@@ -29,11 +29,11 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
 
         $this->dispatchJobIgnoreException(['foo' => 'bar']);
 
-        $this->assertNotEmpty(HeavyJobsStore::get($heavyPayloadId));
+        $this->assertNotEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
 
         $this->artisan('queue:forget', ['id' => $logId])->assertExitCode(0);
 
-        $this->assertEmpty(HeavyJobsStore::get($heavyPayloadId));
+        $this->assertEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
     }
 
     public function testFlush(): void
@@ -50,13 +50,13 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
         $this->dispatchJobIgnoreException(['baz' => 3]);
 
         foreach ($ids as $id) {
-            $this->assertNotEmpty(HeavyJobsStore::get($id));
+            $this->assertNotEmpty(HeavyJobsStore::getFailed($id));
         }
 
         $this->artisan('queue:flush')->assertExitCode(0);
 
         foreach ($ids as $id) {
-            $this->assertEmpty(HeavyJobsStore::get($id));
+            $this->assertEmpty(HeavyJobsStore::getFailed($id));
         }
     }
 
@@ -73,8 +73,10 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
     {
         try {
             FakeFailedJob::dispatch($data);
-        } catch (Throwable $throwable) {
-            // ignore exception;
+        } catch (RuntimeException $runtimeException) {
+            if ($runtimeException->getMessage() !== 'Some exception.') {
+                throw $runtimeException;
+            }
         }
     }
 }

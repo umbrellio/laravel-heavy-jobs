@@ -4,58 +4,99 @@ declare(strict_types=1);
 
 namespace Umbrellio\LaravelHeavyJobs\Stores;
 
+use Carbon\Carbon;
 use Illuminate\Redis\RedisManager;
 use Umbrellio\LaravelHeavyJobs\Stores\Helpers\LuaScripts;
+use function \count;
 
 final class RedisStore implements StoreInterface
 {
-    public const JOBS_HASH_KEY = 'heavy_job_payloads';
-    public const FAILED_JOBS_HASH_KEY = 'failed_heavy_job_payloads';
+    public const JOB_PAYLOADS_KEY = 'heavy_job_payloads';
+    public const FAILED_JOB_PAYLOADS_KEY = 'failed_heavy_job_payloads';
+    public const LIFETIME_FAILED_JOB_PAYLOADS_KEY = 'lifetime_failed_heavy_job_payloads';
 
     private $connection;
+    private $lifetime;
 
     public function __construct(?string $connection, RedisManager $redis)
     {
         $this->connection = $redis->connection($connection);
+        if (($this->lifetime = config('heavy-jobs.failed_job_lifetime', -1)) !== -1) {
+            $this->lifetime *= 60;
+        }
     }
 
     public function get(string $id): ?string
     {
-        return $this->connection->eval(
-            LuaScripts::get(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
-        ) ?: null;
+        $score = $this->lifetime !== -1 ? Carbon::now()->getTimestamp() : 0;
+
+        [$payload, $ids] = $this->connection->pipeline(function ($pipe) use ($id, $score) {
+            $pipe->eval(LuaScripts::get(), [self::JOB_PAYLOADS_KEY, self::FAILED_JOB_PAYLOADS_KEY, $id], 2);
+            $pipe->zrangebyscore(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, '-inf', (string)$score);
+        });
+
+        if (count($ids)) {
+            $this->connection->pipeline(function ($pipe) use ($ids, $score) {
+                $pipe->hdel(self::FAILED_JOB_PAYLOADS_KEY, ...$ids);
+                $pipe->zremrangebyscore(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, '-inf', (string)$score);
+            });
+        }
+
+        return $payload ?: null;
+    }
+
+    public function getFailed(string $id): ?string
+    {
+        return $this->connection->hget(self::FAILED_JOB_PAYLOADS_KEY, $id) ?: null;
     }
 
     public function set(string $id, string $serializedData): bool
     {
-        return (bool) $this->connection->eval(
-            LuaScripts::set(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id, $serializedData
-        );
+        [$set] = $this->connection->pipeline(function ($pipe) use ($id, $serializedData) {
+            $pipe->hset(self::JOB_PAYLOADS_KEY, $id, $serializedData);
+            $pipe->zrem(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, $id);
+        });
+
+        return (bool) $set;
     }
 
     public function has(string $id): bool
     {
-        return (bool) $this->connection->eval(
-            LuaScripts::has(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
-        );
+        return (bool) $this->connection->hexists(self::JOB_PAYLOADS_KEY, $id);
     }
 
     public function remove(string $id): bool
     {
-        return (bool) $this->connection->eval(
-            LuaScripts::remove(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
-        );
+        return (bool) $this->connection->del(self::JOB_PAYLOADS_KEY, $id);
+    }
+
+    public function removeFailed(string $id): bool
+    {
+        [$deleted] = $this->connection->pipeline(function ($pipe) use ($id) {
+            $pipe->hdel(self::FAILED_JOB_PAYLOADS_KEY, $id);
+            $pipe->zrem(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, $id);
+        });
+
+        return (bool) $deleted;
     }
 
     public function markAsFailed(string $id): bool
     {
-        return (bool) $this->connection->eval(
-            LuaScripts::markAsFailed(), 2, self::JOBS_HASH_KEY, self::FAILED_JOBS_HASH_KEY, $id
-        );
+        [$marked] = $this->connection->pipeline(function ($pipe) use ($id) {
+            $pipe->eval(LuaScripts::markAsFailed(), [self::JOB_PAYLOADS_KEY, self::FAILED_JOB_PAYLOADS_KEY, $id], 2);
+            $pipe->zadd(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY, Carbon::now()->getTimestamp() + $this->lifetime, $id);
+        });
+
+        return (bool) $marked;
     }
 
     public function flushFailed(): bool
     {
-        return (bool) $this->connection->del(self::FAILED_JOBS_HASH_KEY);
+        $result = $this->connection->pipeline(function ($pipe) {
+            $pipe->del(self::FAILED_JOB_PAYLOADS_KEY);
+            $pipe->del(self::LIFETIME_FAILED_JOB_PAYLOADS_KEY);
+        });
+
+        return !empty($result[0]) && !empty($result[1]);
     }
 }

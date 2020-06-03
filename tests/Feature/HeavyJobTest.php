@@ -32,7 +32,8 @@ class HeavyJobTest extends IntegrationTest
     public function testJobDestructorClearData(): void
     {
         $callback = function ($fakeJob) {
-            $job = new HeavyJob($fakeJob, true);
+            $job = new HeavyJob($fakeJob);
+            $job->handlePayloadRemove();
 
             serialize($job);
 

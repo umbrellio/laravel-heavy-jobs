@@ -30,9 +30,23 @@ class PayloadStoreManager
         return unserialize($serialized);
     }
 
+    public function getFailed(string $identifier)
+    {
+        if (($serialized = $this->store->getFailed($identifier)) === null) {
+            return null;
+        }
+
+        return unserialize($serialized);
+    }
+
     public function remove(string $identifier): void
     {
         $this->store->remove($identifier);
+    }
+
+    public function removeFailed(string $identifier): void
+    {
+        $this->store->removeFailed($identifier);
     }
 
     public function markAsFailed(string $identifier): void

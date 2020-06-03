@@ -42,7 +42,7 @@ final class FailedJobProviderDecorator implements FailedJobProviderInterface
         if ($record = $this->failedJobProvider->find($id)) {
             $heavyPayloadId = Arr::get(json_decode($record->payload, true), 'heavy-payload-id');
             if ($heavyPayloadId) {
-                HeavyJobsStore::remove($heavyPayloadId);
+                HeavyJobsStore::removeFailed($heavyPayloadId);
             }
         }
 

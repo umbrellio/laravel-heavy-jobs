@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
 
-use Illuminate\Database\Connection as DbConnection;
 use Illuminate\Redis\Connections\Connection as RedisConnection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Mockery;
-use Umbrellio\LaravelHeavyJobs\Stores\DatabaseStore;
 use Umbrellio\LaravelHeavyJobs\Stores\RedisStore;
 use Umbrellio\LaravelHeavyJobs\Stores\StoreInterface;
 use Umbrellio\LaravelHeavyJobs\Stores\StoreResolver;
@@ -35,18 +32,6 @@ class StoreResolverTest extends IntegrationTest
             ->andReturn(Mockery::mock(RedisConnection::class));
 
         $this->assertInstanceOf(RedisStore::class, $this->resolver->resolve());
-    }
-
-    public function testResolveDatabase(): void
-    {
-        $this->app['config']->set('heavy-jobs.driver', 'database');
-
-        DB::spy()
-            ->shouldReceive('connection')
-            ->once()
-            ->andReturn(Mockery::mock(DbConnection::class));
-
-        $this->assertInstanceOf(DatabaseStore::class, $this->resolver->resolve());
     }
 
     public function testResolveCustomDriver(): void

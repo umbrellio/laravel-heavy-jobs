@@ -29,8 +29,9 @@ abstract class IntegrationTest extends TestCase
     protected function tearDown(): void
     {
         // автоматически очищаем данные, после каждого теста.
-        Redis::del(RedisStore::JOBS_HASH_KEY);
-        Redis::del(RedisStore::FAILED_JOBS_HASH_KEY);
+        Redis::del(RedisStore::JOB_PAYLOADS_KEY);
+        Redis::del(RedisStore::FAILED_JOB_PAYLOADS_KEY);
+        Redis::del(RedisStore::LIFETIME_FAILED_JOB_PAYLOADS_KEY);
 
         parent::tearDown();
     }

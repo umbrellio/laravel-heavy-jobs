@@ -13,10 +13,10 @@ final class HeavyJob
     private $heavyPayloadId;
     private $handlePayloadRemove;
 
-    public function __construct($job, $handlePayloadRemove = false)
+    public function __construct($job)
     {
         $this->job = $job;
-        $this->handlePayloadRemove = $handlePayloadRemove;
+        $this->handlePayloadRemove = false;
         $this->heavyPayloadId = HeavyJobsStore::generateId();
     }
 
@@ -75,9 +75,9 @@ final class HeavyJob
         return $this->handlePayloadRemove;
     }
 
-    public function DisablePayloadRemove(): void
+    public function handlePayloadRemove(): void
     {
-        $this->handlePayloadRemove = false;
+        $this->handlePayloadRemove = true;
     }
 
     public function handle(QueueingDispatcher $dispatcher)

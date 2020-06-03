@@ -18,76 +18,12 @@ final class LuaScripts
     public static function get()
     {
         return <<<'LUA'
-local payload = redis.call('hget', KEYS[1], ARGV[1])
-
-if(payload == false) then
-    payload = redis.call('hget', KEYS[2], ARGV[1])
+local failed_payload = redis.call('hget', KEYS[2], ARGV[1])
+if(failed_payload ~= false) then
+    redis.call('hset', KEYS[1], ARGV[1], failed_payload)
 end
 
-return payload
-LUA;
-    }
-
-    /**
-     * Записывает payload во временное хеш-хранилище.
-     *
-     * KEYS[1] - ключ временного хеш-хранилища job'ок.
-     * KEYS[2] - ключ хеш-хранилища job'ок завершившихся ошибкой.
-     * ARGV[1] - id payload'a
-     * ARGV[2] - payload
-     *
-     * @return string
-     */
-    public static function set()
-    {
-        return <<<'LUA'
-redis.call('hdel', KEYS[2], ARGV[1])
-
-return redis.call('hset', KEYS[1], ARGV[1], ARGV[2])
-LUA;
-    }
-
-    /**
-     * Проверяет существование payload в хеш-хранилище.
-     *
-     * KEYS[1] - ключ хеш-хранилища job'ок.
-     * KEYS[2] - ключ хеш-хранилища job'ок завершившихся ошибкой.
-     * ARGV[1] - id payload'а
-     *
-     * @return string
-     */
-    public static function has()
-    {
-        return <<<'LUA'
-local exists = redis.call('hexists', KEYS[1], ARGV[1])
-
-if(exists == 0) then
-    exists = redis.call('hexists', KEYS[2], ARGV[1])
-end
-
-return exists
-LUA;
-    }
-
-    /**
-     * Удаляет payload из хеш-хранилище.
-     *
-     * KEYS[1] - ключ хеш-хранилища job'ок.
-     * KEYS[2] - ключ хеш-хранилища job'ок завершившихся ошибкой.
-     * ARGV[1] - id payload'а
-     *
-     * @return string
-     */
-    public static function remove()
-    {
-        return <<<'LUA'
-local deleted = redis.call('hdel', KEYS[1], ARGV[1])
-
-if(deleted == 0) then
-    deleted = redis.call('hdel', KEYS[2], ARGV[1])
-end
-
-return deleted
+return redis.call('hget', KEYS[1], ARGV[1])
 LUA;
     }
 
@@ -108,6 +44,7 @@ local marked = 0
 
 if(payload ~= false) then
     marked = redis.call('hset', KEYS[2], ARGV[1], payload)
+    redis.call('hdel', KEYS[1], ARGV[1])
 end
 
 return marked
