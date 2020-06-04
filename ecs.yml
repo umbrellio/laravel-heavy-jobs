@@ -1,4 +1,8 @@
 parameters:
+  paths:
+    - 'config'
+    - 'src'
+    - 'tests'
   sets:
     - 'clean-code'
     - 'psr12'
@@ -28,5 +32,6 @@ parameters:
     SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSniff: ~
     SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSniff: ~
     SlevomatCodingStandard\Sniffs\TypeHints\ReturnTypeHintSniff: ~
+    Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: ~
   exclude_files:
     - vendor/*

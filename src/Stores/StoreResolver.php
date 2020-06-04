@@ -31,8 +31,8 @@ final class StoreResolver
 
     private function getStore(): StoreInterface
     {
-        $driver = $this->app['config']['heavy-jobs']['driver'] ?? 'redis';
-        $parameters = $this->app['config']['heavy-jobs']['parameters'] ?? [];
+        $driver = $this->app['config']['heavy-jobs']['driver'];
+        $parameters = $this->app['config']['heavy-jobs']['parameters'];
 
         if (isset($this->customDrivers[$driver])) {
             $store = $this->customDrivers[$driver]($this->app, $parameters);

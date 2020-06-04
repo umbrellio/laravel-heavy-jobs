@@ -11,25 +11,20 @@ final class HeavyJob
 {
     private $job;
     private $heavyPayloadId;
-    private $isPushed;
+    private $handlePayloadRemove;
 
     public function __construct($job)
     {
         $this->job = $job;
+        $this->handlePayloadRemove = false;
         $this->heavyPayloadId = HeavyJobsStore::generateId();
-        $this->isPushed = false;
     }
 
     public function __destruct()
     {
-        if (!$this->isPushed) {
+        if ($this->handlePayloadRemove) {
             HeavyJobsStore::remove($this->heavyPayloadId);
         }
-    }
-
-    public function __clone()
-    {
-        $this->pushed();
     }
 
     public function __get($name)
@@ -52,12 +47,37 @@ final class HeavyJob
     public function __wakeup(): void
     {
         $this->job = HeavyJobsStore::get($this->heavyPayloadId);
-        $this->isPushed = true;
+        $this->handlePayloadRemove = false;
+    }
+
+    public function __clone()
+    {
+        $this->handlePayloadRemove = false;
     }
 
     public function __call($name, $arguments)
     {
         return $this->job->{$name}(...$arguments);
+    }
+
+    public function getJob()
+    {
+        return $this->job;
+    }
+
+    public function getHeavyPayloadId(): string
+    {
+        return $this->heavyPayloadId;
+    }
+
+    public function IsHandlePayloadRemove(): bool
+    {
+        return $this->handlePayloadRemove;
+    }
+
+    public function handlePayloadRemove(): void
+    {
+        $this->handlePayloadRemove = true;
     }
 
     public function handle(QueueingDispatcher $dispatcher)
@@ -74,23 +94,8 @@ final class HeavyJob
         return get_class($this->job);
     }
 
-    public function pushed(): void
+    public function failed(): void
     {
-        $this->isPushed = true;
-    }
-
-    public function getJob()
-    {
-        return $this->job;
-    }
-
-    public function getHeavyPayloadId(): string
-    {
-        return $this->heavyPayloadId;
-    }
-
-    public function isPushed(): bool
-    {
-        return $this->isPushed;
+        HeavyJobsStore::markAsfailed($this->heavyPayloadId);
     }
 }

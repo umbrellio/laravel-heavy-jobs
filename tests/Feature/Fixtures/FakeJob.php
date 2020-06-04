@@ -7,35 +7,34 @@ namespace Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Cache;
+use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;
+use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\Work\WorkRepository;
 
 final class FakeJob implements ShouldQueue, ShouldStorePayload
 {
     use Queueable;
     use Dispatchable;
 
-    private $key;
-    private $data;
+    private $workName;
 
-    public function __construct(string $key, array $data)
+    public function __construct(string $workName)
     {
-        $this->key = $key;
-        $this->data = $data;
+        $this->workName = $workName;
     }
 
-    public function handle(): void
+    public function handle(WorkRepository $workRepository): void
     {
-        Cache::forever($this->key, $this->data);
+        $work = $workRepository->getWork($this->workName);
+        if ($work->isCompleted()) {
+            throw new RuntimeException('Work already completed!');
+        }
+
+        $work->doWork();
     }
 
-    public function getKey(): string
+    public function getWorkName(): string
     {
-        return $this->key;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
+        return $this->workName;
     }
 }

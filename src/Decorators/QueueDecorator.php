@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Decorators;
 
 use Illuminate\Contracts\Queue\Queue;
+use Throwable;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
 use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;
 
@@ -29,11 +30,15 @@ final class QueueDecorator implements Queue
 
     public function push($job, $data = '', $queue = null)
     {
-        $job = $this->prepareJob($job);
+        try {
+            $job = $this->prepareJob($job);
 
-        return tap($this->queue->push($job, $data, $queue), function () use ($job): void {
+            return $this->queue->push($job, $data, $queue);
+        } catch (Throwable $throwable) {
             $this->markJobs([$job]);
-        });
+
+            throw $throwable;
+        }
     }
 
     public function pushRaw($payload, $queue = null, array $options = [])
@@ -43,38 +48,54 @@ final class QueueDecorator implements Queue
 
     public function pushOn($queue, $job, $data = '')
     {
-        $job = $this->prepareJob($job);
+        try {
+            $job = $this->prepareJob($job);
 
-        return tap($this->queue->pushOn($queue, $job, $data), function () use ($job): void {
+            return $this->queue->pushOn($queue, $job, $data);
+        } catch (Throwable $throwable) {
             $this->markJobs([$job]);
-        });
+
+            throw $throwable;
+        }
     }
 
     public function later($delay, $job, $data = '', $queue = null)
     {
-        $job = $this->prepareJob($job);
+        try {
+            $job = $this->prepareJob($job);
 
-        return tap($this->queue->later($delay, $job, $data, $queue), function () use ($job): void {
+            return $this->queue->later($delay, $job, $data, $queue);
+        } catch (Throwable $throwable) {
             $this->markJobs([$job]);
-        });
+
+            throw $throwable;
+        }
     }
 
     public function laterOn($queue, $delay, $job, $data = '')
     {
-        $job = $this->prepareJob($job);
+        try {
+            $job = $this->prepareJob($job);
 
-        return tap($this->queue->laterOn($queue, $delay, $job, $data), function () use ($job): void {
+            return $this->queue->laterOn($queue, $delay, $job, $data);
+        } catch (Throwable $throwable) {
             $this->markJobs([$job]);
-        });
+
+            throw $throwable;
+        }
     }
 
     public function bulk($jobs, $data = '', $queue = null)
     {
-        $jobs = $this->prepareJobs($jobs);
+        try {
+            $jobs = $this->prepareJobs($jobs);
 
-        return tap($this->queue->bulk($jobs, $data, $queue), function () use ($jobs): void {
+            return $this->queue->bulk($jobs, $data, $queue);
+        } catch (Throwable $throwable) {
             $this->markJobs($jobs);
-        });
+
+            throw $throwable;
+        }
     }
 
     public function pop($queue = null)
@@ -110,7 +131,7 @@ final class QueueDecorator implements Queue
     {
         foreach ($jobs as $job) {
             if ($job instanceof HeavyJob) {
-                $job->pushed();
+                $job->handlePayloadRemove();
             }
         }
     }

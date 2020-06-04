@@ -13,16 +13,6 @@ __Миграция настроек пакета.__
 
 `php artisan vendor:publish --tag heavy-jobs-config`
 
-__База данных для хранения payload.__  
-Если необходимо использовать БД, сначала нужно запустить команду для создания миграции.
-
-`php artisan heavy-jobs:db-store-table`
-
-После чего выполнить миграцию БД.
-
-`php artisan migrate`
-
-
 ## Documentation
 
 Для того что бы изменить хранилище payload'a джобки, у неё необходимо указать интерфейс 
