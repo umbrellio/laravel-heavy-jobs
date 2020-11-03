@@ -28,7 +28,7 @@
     "require": {
         "php": ">=7.2",
         "ext-json": "*",
-        "ext-php-redis": "*",
+        "ext-redis": "*",
         "laravel/framework": "^5.8|^6.0|^7.0|^8.0"
     },
     "require-dev": {
