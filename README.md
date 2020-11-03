@@ -9,9 +9,19 @@ __Добавление пакета через composer__
 
 `composer require umbrellio/laravel-heavy-jobs`
 
-__Миграция настроек пакета.__
+__Миграция настроек пакета__
 
 `php artisan vendor:publish --tag heavy-jobs-config`
+
+__Проверка зависимостей__
+
+Пакет работает только с редис-клиентом `php-redis`, соответственно нужно проверить что в `config/database.php` 
+значится что-то вроде
+
+```
+'redis' => [
+    'client' => env('REDIS_CLIENT', 'phpredis'),
+```
 
 ## Documentation
 
