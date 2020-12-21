@@ -1,5 +1,10 @@
 # Laravel heavy-jobs
 
+[![Github Status](https://github.com/umbrellio/laravel-heavy-jobs/workflows/CI/badge.svg)](https://github.com/umbrellio/laravel-heavy-jobs/actions)
+[![Coverage Status](https://coveralls.io/repos/github/umbrellio/laravel-heavy-jobs/badge.svg?branch=master)](https://coveralls.io/github/umbrellio/laravel-heavy-jobs?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/umbrellio/laravel-heavy-jobs/v/stable.png)](https://packagist.org/packages/umbrellio/laravel-heavy-jobs)
+[![Total Downloads](https://poser.pugx.org/umbrellio/laravel-heavy-jobs/downloads.png)](https://packagist.org/packages/umbrellio/laravel-heavy-jobs)
+
 Пакет позволяет сохранять большой payload джобки в стороннем хранилище.  
 
 

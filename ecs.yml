@@ -1,37 +1,14 @@
+imports:
+  - { resource: vendor/umbrellio/code-style-php/umbrellio-cs.yml }
+
+services:
+  PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer:
+    style: annotation
+  PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: ~
+  PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer:
+    default: single_space
+
 parameters:
-  paths:
-    - 'config'
-    - 'src'
-    - 'tests'
-  sets:
-    - 'clean-code'
-    - 'psr12'
-    - 'common'
-    - 'symplify'
-    - 'types'
-    - 'php70'
-    - 'php71'
-    - 'dead-code'
-  skip:
-    PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
-    PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer: ~
-    PhpCsFixer\Fixer\Phpdoc\PhpdocLineSpanFixer: ~
-    PhpCsFixer\Fixer\Phpdoc\PhpdocTrimFixer: ~
-    PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer:
-      - 'config/*.php'
-    Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer:
-      inline_short_lines: ''
-    Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: ~
-    Symplify\CodingStandard\Sniffs\Naming\AbstractClassNameSniff: ~
-    Symplify\CodingStandard\Sniffs\Naming\InterfaceNameSniff: ~
-    Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer: ~
-    Symplify\CodingStandard\Sniffs\Naming\TraitNameSniff: ~
-    Symplify\CodingStandard\Sniffs\Commenting\VarConstantCommentSniff: ~
-    Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff: ~
-    Symplify\CodingStandard\Sniffs\Architecture\ExplicitExceptionSniff: ~
-    SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSniff: ~
-    SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSniff: ~
-    SlevomatCodingStandard\Sniffs\TypeHints\ReturnTypeHintSniff: ~
-    Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: ~
+  cache_directory: .ecs_cache
   exclude_files:
     - vendor/*

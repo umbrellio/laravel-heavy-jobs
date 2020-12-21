@@ -1,4 +1,6 @@
-/.idea
 /vendor
-
-/.phpunit.result.cache
+/.idea
+.ecs_cache
+phpunit.xml
+/build/*
+.phpunit.result.cache

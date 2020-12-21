@@ -20,12 +20,18 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
         $this->app->singleton('queue.failer', FakeFailedJobProvider::class);
     }
 
-    public function testForget(): void
+    /**
+     * @test
+     */
+    public function forget(): void
     {
-        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$heavyPayloadId, &$logId): void {
-            $logId = $this->logFailedJob($event);
-            $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
-        });
+        $this->app['events']->listen(
+            JobFailed::class,
+            function (JobFailed $event) use (&$heavyPayloadId, &$logId): void {
+                $logId = $this->logFailedJob($event);
+                $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
+            }
+        );
 
         $this->dispatchJobIgnoreException();
 
@@ -36,14 +42,19 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
         $this->assertEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
     }
 
-    public function testFlush(): void
+    /**
+     * @test
+     */
+    public function flush(): void
     {
         $ids = [];
-        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$ids): void {
-            $this->logFailedJob($event);
-
-            $ids[] = $event->job->payload()['heavy-payload-id'];
-        });
+        $this->app['events']->listen(
+            JobFailed::class,
+            function (JobFailed $event) use (&$ids): void {
+                $this->logFailedJob($event);
+                $ids[] = $event->job->payload()['heavy-payload-id'];
+            }
+        );
 
         $this->dispatchJobIgnoreException();
         $this->dispatchJobIgnoreException();
