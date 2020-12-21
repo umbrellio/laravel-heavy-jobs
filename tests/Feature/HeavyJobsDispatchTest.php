@@ -17,7 +17,10 @@ use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
 
 class HeavyJobsDispatchTest extends IntegrationTest
 {
-    public function testDecoratorIntegration(): void
+    /**
+     * @test
+     */
+    public function decoratorIntegration(): void
     {
         /** @var QueueManagerDecorator $queueManager */
         $queueManager = $this->app->get('queue');
@@ -25,23 +28,32 @@ class HeavyJobsDispatchTest extends IntegrationTest
         $this->assertInstanceOf(QueueDecorator::class, $queueManager->connection());
     }
 
-    public function testStoreQueuePayload(): void
+    /**
+     * @test
+     */
+    public function storeQueuePayload(): void
     {
         $workName = 'foo';
 
-        $this->app['events']->listen(JobProcessed::class, function (JobProcessed $event) use ($workName): void {
-            $this->assertTrue($this->workRepository->getWork($workName)->isCompleted());
+        $this->app['events']->listen(
+            JobProcessed::class,
+            function (JobProcessed $event) use ($workName): void {
+                $this->assertTrue($this->workRepository->getWork($workName)->isCompleted());
 
-            $jobPayload = $event->job->payload();
+                $jobPayload = $event->job->payload();
 
-            $this->assertSame(HeavyJob::class, $jobPayload['data']['commandName']);
-            $this->assertEmpty(HeavyJobsStore::get($jobPayload['heavy-payload-id']));
-        });
+                $this->assertSame(HeavyJob::class, $jobPayload['data']['commandName']);
+                $this->assertEmpty(HeavyJobsStore::get($jobPayload['heavy-payload-id']));
+            }
+        );
 
         FakeJob::dispatch($workName);
     }
 
-    public function testMarkAsFailed(): void
+    /**
+     * @test
+     */
+    public function markAsFailed(): void
     {
         HeavyJobsStore::spy()
             ->shouldReceive('get')->andReturn(new FakeFailedJob())
@@ -51,13 +63,19 @@ class HeavyJobsDispatchTest extends IntegrationTest
         FakeFailedJob::dispatch();
     }
 
-    public function testLifetime(): void
+    /**
+     * @test
+     */
+    public function lifetime(): void
     {
         config(['heavy-jobs.failed_job_lifetime' => 1]);
 
-        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$heavyPayloadId): void {
-            $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
-        });
+        $this->app['events']->listen(
+            JobFailed::class,
+            function (JobFailed $event) use (&$heavyPayloadId): void {
+                $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
+            }
+        );
 
         $this->dispatchJobIgnoreException();
 
@@ -72,13 +90,19 @@ class HeavyJobsDispatchTest extends IntegrationTest
         config(['heavy-jobs.failed_job_lifetime' => -1]);
     }
 
-    public function testPersistsLifetime(): void
+    /**
+     * @test
+     */
+    public function persistsLifetime(): void
     {
         config(['heavy-jobs.failed_job_lifetime' => -1]);
 
-        $this->app['events']->listen(JobFailed::class, function (JobFailed $event) use (&$heavyPayloadId): void {
-            $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
-        });
+        $this->app['events']->listen(
+            JobFailed::class,
+            function (JobFailed $event) use (&$heavyPayloadId): void {
+                $heavyPayloadId = $event->job->payload()['heavy-payload-id'];
+            }
+        );
 
         $this->dispatchJobIgnoreException();
 

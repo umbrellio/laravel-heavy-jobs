@@ -14,7 +14,9 @@ use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
 
 class StoreResolverTest extends IntegrationTest
 {
-    /** @var StoreResolver */
+    /**
+     * @var StoreResolver
+     */
     protected $resolver;
 
     protected function setUp(): void
@@ -24,7 +26,10 @@ class StoreResolverTest extends IntegrationTest
         $this->resolver = $this->app->make(StoreResolver::class);
     }
 
-    public function testResolveRedis(): void
+    /**
+     * @test
+     */
+    public function resolveRedis(): void
     {
         Redis::spy()
             ->shouldReceive('connection')
@@ -34,7 +39,10 @@ class StoreResolverTest extends IntegrationTest
         $this->assertInstanceOf(RedisStore::class, $this->resolver->resolve());
     }
 
-    public function testResolveCustomDriver(): void
+    /**
+     * @test
+     */
+    public function resolveCustomDriver(): void
     {
         $this->app['config']->set('heavy-jobs.driver', 'custom');
 
@@ -46,7 +54,10 @@ class StoreResolverTest extends IntegrationTest
         $this->assertSame($customStore, $this->resolver->resolve());
     }
 
-    public function testResolveStoreCache(): void
+    /**
+     * @test
+     */
+    public function resolveStoreCache(): void
     {
         $this->app['config']->set('heavy-jobs.driver', 'custom');
         $customStore = Mockery::mock(StoreInterface::class);

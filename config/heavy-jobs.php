@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'driver' => env('HEAVY_JOBS_DRIVER', 'redis'),
     'parameters' => [

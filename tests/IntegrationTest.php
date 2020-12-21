@@ -13,7 +13,9 @@ use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\Work\WorkRepository;
 
 abstract class IntegrationTest extends TestCase
 {
-    /** @var WorkRepository */
+    /**
+     * @var WorkRepository
+     */
     protected $workRepository;
 
     protected function setUp(): void
