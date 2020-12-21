@@ -36,6 +36,7 @@
         "phpunit/phpunit": "^8.3|^9.0",
         "sensiolabs/security-checker": "^6.0",
         "symplify/easy-coding-standard": "^7.2|^9.0",
+        "php-coveralls/php-coveralls": "^2.1",
         "orchestra/testbench": "^6.2"
     },
     "scripts": {
