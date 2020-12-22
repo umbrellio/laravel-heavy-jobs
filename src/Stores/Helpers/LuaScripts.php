@@ -17,14 +17,14 @@ final class LuaScripts
      */
     public static function get()
     {
-        return <<<'LUA'
+        return <<<'CODE_SAMPLE'
 local failed_payload = redis.call('hget', KEYS[2], ARGV[1])
 if(failed_payload ~= false) then
     redis.call('hset', KEYS[1], ARGV[1], failed_payload)
 end
 
 return redis.call('hget', KEYS[1], ARGV[1])
-LUA;
+CODE_SAMPLE;
     }
 
     /**
@@ -38,7 +38,7 @@ LUA;
      */
     public static function markAsFailed()
     {
-        return <<<'LUA'
+        return <<<'CODE_SAMPLE'
 local payload = redis.call('hget', KEYS[1], ARGV[1])
 local marked = 0
 
@@ -48,6 +48,6 @@ if(payload ~= false) then
 end
 
 return marked
-LUA;
+CODE_SAMPLE;
     }
 }

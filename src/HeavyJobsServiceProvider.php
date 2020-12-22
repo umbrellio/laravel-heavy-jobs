@@ -25,7 +25,9 @@ class HeavyJobsServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->publishes([self::CONFIG_FILE => config_path('heavy-jobs.php')], ['heavy-jobs-config']);
+        $this->publishes([
+            self::CONFIG_FILE => config_path('heavy-jobs.php'),
+        ], ['heavy-jobs-config']);
     }
 
     public function register(): void
@@ -54,7 +56,9 @@ class HeavyJobsServiceProvider extends ServiceProvider
         Queue::createPayloadUsing(function ($connection, $queue, $payload) {
             $job = Arr::get($payload, 'data.command');
             if ($job instanceof HeavyJob) {
-                return ['heavy-payload-id' => $job->getHeavyPayloadId()];
+                return [
+                    'heavy-payload-id' => $job->getHeavyPayloadId(),
+                ];
             }
 
             return [];

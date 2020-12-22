@@ -56,8 +56,10 @@ class HeavyJobsDispatchTest extends IntegrationTest
     public function markAsFailed(): void
     {
         HeavyJobsStore::spy()
-            ->shouldReceive('get')->andReturn(new FakeFailedJob())
-            ->shouldReceive('markAsFailed')->once();
+            ->shouldReceive('get')
+            ->andReturn(new FakeFailedJob())
+            ->shouldReceive('markAsFailed')
+            ->once();
 
         $this->expectExceptionObject(new RuntimeException('Some exception.'));
         FakeFailedJob::dispatch();
@@ -68,7 +70,9 @@ class HeavyJobsDispatchTest extends IntegrationTest
      */
     public function lifetime(): void
     {
-        config(['heavy-jobs.failed_job_lifetime' => 1]);
+        config([
+            'heavy-jobs.failed_job_lifetime' => 1,
+        ]);
 
         $this->app['events']->listen(
             JobFailed::class,
@@ -87,7 +91,9 @@ class HeavyJobsDispatchTest extends IntegrationTest
 
         $this->assertEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
 
-        config(['heavy-jobs.failed_job_lifetime' => -1]);
+        config([
+            'heavy-jobs.failed_job_lifetime' => -1,
+        ]);
     }
 
     /**
@@ -95,7 +101,9 @@ class HeavyJobsDispatchTest extends IntegrationTest
      */
     public function persistsLifetime(): void
     {
-        config(['heavy-jobs.failed_job_lifetime' => -1]);
+        config([
+            'heavy-jobs.failed_job_lifetime' => -1,
+        ]);
 
         $this->app['events']->listen(
             JobFailed::class,

@@ -89,8 +89,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    name: 'Test / PHP ${{ matrix.php_versions }} with Redis ${{ matrix.redis_version }}'
-    continue-on-error: ${{ matrix.php_versions == '8.0' }}
+    name: 'Test / PHP ${{ matrix.php_versions }} / Redis ${{ matrix.redis_version }}'
     needs:
       - lint
     steps:
@@ -125,6 +124,7 @@ jobs:
           redis-version: ${{ matrix.redis_version }}
           auto-start: "true"
       - name: 'Install PHP dependencies with Composer'
+        continue-on-error: ${{ matrix.experimental }}
         run: |
           rm composer.lock
           composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
