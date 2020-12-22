@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
+namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Jobs;
 
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Queue\Events\JobProcessed;
@@ -11,11 +11,11 @@ use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueManagerDecorator;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeFailedJob;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeJob;
-use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeFailedJob;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeJob;
+use Umbrellio\LaravelHeavyJobs\Tests\FunctionalTestCase;
 
-class HeavyJobsDispatchTest extends IntegrationTest
+class HeavyJobsDispatchTest extends FunctionalTestCase
 {
     /**
      * @test

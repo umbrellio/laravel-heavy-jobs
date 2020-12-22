@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
+namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Decorators;
 
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Support\Facades\Queue;
@@ -10,11 +10,11 @@ use Illuminate\Support\Testing\Fakes\QueueFake;
 use Mockery;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeConditionJob;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeJob;
-use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeConditionJob;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeJob;
+use Umbrellio\LaravelHeavyJobs\Tests\FunctionalTestCase;
 
-class QueueDecoratorTest extends IntegrationTest
+class QueueDecoratorTest extends FunctionalTestCase
 {
     protected function setUp(): void
     {

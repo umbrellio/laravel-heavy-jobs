@@ -138,11 +138,11 @@ jobs:
           ./vendor/bin/phpunit --verbose --stderr --configuration phpunit.github.xml --coverage-clover build/logs/clover.xml --coverage-text
         working-directory: './'
       - name: Upload coverage results to Coveralls
-        continue-on-error: ${{ matrix.experimental }}
+        if: ${{ !matrix.experimental }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_PARALLEL: true
-          COVERALLS_FLAG_NAME: php-${{ matrix.php-versions }}-redis-${{ matrix.redis-version }}
+          COVERALLS_FLAG_NAME: php-${{ matrix.php_versions }}-redis-${{ matrix.redis-version }}
         run: ./vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
   coverage:
     needs: test

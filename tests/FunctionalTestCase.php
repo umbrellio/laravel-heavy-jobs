@@ -9,9 +9,9 @@ use Orchestra\Testbench\TestCase;
 use Umbrellio\LaravelHeavyJobs\HeavyJobsServiceProvider;
 use Umbrellio\LaravelHeavyJobs\Stores\PayloadStoreManager;
 use Umbrellio\LaravelHeavyJobs\Stores\RedisStore;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\Work\WorkRepository;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\Work\WorkRepository;
 
-abstract class IntegrationTest extends TestCase
+abstract class FunctionalTestCase extends TestCase
 {
     /**
      * @var WorkRepository

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
+namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Facades;
 
 use Illuminate\Queue\Events\JobFailed;
 use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeFailedJob;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeFailedJobProvider;
-use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeFailedJob;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeFailedJobProvider;
+use Umbrellio\LaravelHeavyJobs\Tests\FunctionalTestCase;
 
-class FailedJobProviderDecoratorTest extends IntegrationTest
+class FailedJobProviderDecoratorTest extends FunctionalTestCase
 {
     protected function setUp(): void
     {
