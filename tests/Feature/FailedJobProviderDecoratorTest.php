@@ -37,7 +37,9 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
 
         $this->assertNotEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
 
-        $this->artisan('queue:forget', ['id' => $logId])->assertExitCode(0);
+        $this->artisan('queue:forget', [
+            'id' => $logId,
+        ])->assertExitCode(0);
 
         $this->assertEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
     }
@@ -64,7 +66,8 @@ class FailedJobProviderDecoratorTest extends IntegrationTest
             $this->assertNotEmpty(HeavyJobsStore::getFailed($id));
         }
 
-        $this->artisan('queue:flush')->assertExitCode(0);
+        $this->artisan('queue:flush')
+            ->assertExitCode(0);
 
         foreach ($ids as $id) {
             $this->assertEmpty(HeavyJobsStore::getFailed($id));

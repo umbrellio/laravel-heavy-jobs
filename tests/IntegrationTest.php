@@ -45,7 +45,9 @@ abstract class IntegrationTest extends TestCase
 
     protected function getPackageAliases($app): array
     {
-        return ['heavy-jobs-store' => PayloadStoreManager::class];
+        return [
+            'heavy-jobs-store' => PayloadStoreManager::class,
+        ];
     }
 
     protected function getEnvironmentSetUp($app): void
