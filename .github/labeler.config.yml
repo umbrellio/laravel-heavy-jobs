@@ -1,5 +1,5 @@
 type:build:
-  - ".github/**"
+  - ".github/**/*"
   - ".coveralls.yml"
   - "phpunit.github.xml"
   - ".gitignore"
@@ -8,22 +8,24 @@ type:build:
   - "composer.lock"
 
 type:jobs:
-  - "src/Jobs/*"
+  - "src/Jobs/**/*"
 
 type:stores:
   - "src/Stores/**/*"
 
 type:facades:
-  - "src/Facades/*"
+  - "src/Facades/**/*"
 
 type:exceptions:
-  - "src/Exceptions/*"
+  - "src/Exceptions/**/*"
 
 type:decorators:
-  - "src/Decorators/*"
+  - "src/Decorators/**/*"
 
 type:tests:
-  - any: ['tests/**/*', 'phpunit.xml.dist', 'tests.sh']
+  - 'tests/**/*'
+  - 'phpunit.xml.dist'
+  - 'tests.sh'
 
 theme:docs:
   - "README.md"

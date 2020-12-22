@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures;
+namespace Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;

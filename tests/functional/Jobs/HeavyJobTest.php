@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
+namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Jobs;
 
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\FakeJob;
-use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeJob;
+use Umbrellio\LaravelHeavyJobs\Tests\FunctionalTestCase;
 
-class HeavyJobTest extends IntegrationTest
+class HeavyJobTest extends FunctionalTestCase
 {
     /**
      * @test

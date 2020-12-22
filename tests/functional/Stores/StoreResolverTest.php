@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\LaravelHeavyJobs\Tests\Feature;
+namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Stores;
 
 use Illuminate\Redis\Connections\Connection as RedisConnection;
 use Illuminate\Support\Facades\Redis;
@@ -10,9 +10,9 @@ use Mockery;
 use Umbrellio\LaravelHeavyJobs\Stores\RedisStore;
 use Umbrellio\LaravelHeavyJobs\Stores\StoreInterface;
 use Umbrellio\LaravelHeavyJobs\Stores\StoreResolver;
-use Umbrellio\LaravelHeavyJobs\Tests\IntegrationTest;
+use Umbrellio\LaravelHeavyJobs\Tests\FunctionalTestCase;
 
-class StoreResolverTest extends IntegrationTest
+class StoreResolverTest extends FunctionalTestCase
 {
     /**
      * @var StoreResolver

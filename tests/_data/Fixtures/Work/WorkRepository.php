@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\Work;
+namespace Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\Work;
 
 final class WorkRepository
 {

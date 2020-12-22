@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures;
+namespace Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;
-use Umbrellio\LaravelHeavyJobs\Tests\Feature\Fixtures\Work\WorkRepository;
+use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\Work\WorkRepository;
 
 final class FakeJob implements ShouldQueue, ShouldStorePayload
 {

@@ -1,6 +1,6 @@
 addReviewers: true
 
-numberOfReviewers: 1
+numberOfReviewers: 2
 
 reviewers:
  - pvsaitpe
@@ -10,6 +10,7 @@ addAssignees: true
 
 assignees:
  - pvsaintpe
+ - zlob
 
 numberOfAssignees: 1
 
