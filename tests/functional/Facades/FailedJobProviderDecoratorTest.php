@@ -78,8 +78,10 @@ class FailedJobProviderDecoratorTest extends FunctionalTestCase
     {
         // т.к. в драйвере очереди sync нет сохранения невыполненных job'ок, мы его имитируем.
         return resolve('queue.failer')->log(
-            $event->connectionName, $event->job->getQueue(),
-            $event->job->getRawBody(), $event->exception
+            $event->connectionName,
+            $event->job->getQueue(),
+            $event->job->getRawBody(),
+            $event->exception
         );
     }
 
