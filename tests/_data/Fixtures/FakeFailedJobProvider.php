@@ -39,7 +39,7 @@ final class FakeFailedJobProvider implements FailedJobProviderInterface
         unset($this->records[$id]);
     }
 
-    public function flush(): void
+    public function flush($hours = null): void
     {
         $this->records = [];
     }
