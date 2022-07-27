@@ -49,10 +49,10 @@ final class FailedJobProviderDecorator implements FailedJobProviderInterface
         return $this->failedJobProvider->forget($id);
     }
 
-    public function flush(): void
+    public function flush($hours = null): void
     {
         HeavyJobsStore::flushFailed();
 
-        $this->failedJobProvider->flush();
+        $this->failedJobProvider->flush($hours);
     }
 }
