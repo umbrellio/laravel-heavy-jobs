@@ -18,7 +18,7 @@ jobs:
         operating_system:
           - ubuntu-latest
         php_versions:
-          - '7.4'
+          - '8.0'
       fail-fast: false
     env:
       PHP_CS_FIXER_FUTURE_MODE: '0'
@@ -69,8 +69,7 @@ jobs:
           - '5.0'
           - '6.0'
         php_versions:
-          - '7.3'
-          - '7.4'
+          - '8.0'
         include:
           - operating_system: ubuntu-latest
             redis_version: '6.0'
