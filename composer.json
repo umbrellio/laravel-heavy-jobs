@@ -41,7 +41,7 @@
         "phpunit/phpunit": "^8.3|^9.0",
         "php-coveralls/php-coveralls": "^2.1",
         "symplify/easy-coding-standard":  "^9.3.15",
-        "orchestra/testbench": "^7.0"
+        "orchestra/testbench": "^7.0|^8.0"
     },
     "scripts": {
         "lint": [
