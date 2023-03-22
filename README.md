@@ -32,8 +32,7 @@ __Проверка зависимостей__
 
 ## Documentation
 
-Для того что бы изменить хранилище payload'a джобки, у неё необходимо указать интерфейс 
-`Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload`
+Для того что бы изменить хранилище payload'a джобки, у неё необходимо указать интерфейс `Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload`
 
 ```
 use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;
