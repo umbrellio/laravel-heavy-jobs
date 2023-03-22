@@ -70,13 +70,16 @@ jobs:
           - '6.0'
         php_versions:
           - '8.0'
-        laravel:
-          - '^9.0'
-          - '^10.0'
+        laravel: ['^9.0']
         include:
           - operating_system: ubuntu-latest
             redis_version: '6.0'
             php_versions: '8.1'
+            experimental: true
+          - operating_system: ubuntu-latest
+            redis_version: '6.0'
+            php_versions: '8.2'
+            laravel: '^10.0'
             experimental: true
     runs-on: '${{ matrix.operating_system }}'
     services:
