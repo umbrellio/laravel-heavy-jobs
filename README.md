@@ -25,7 +25,7 @@ __Проверка зависимостей__
 
 Пакет работает только с редис-клиентом `php-redis`, соответственно нужно проверить что в `config/database.php` значится что-то вроде
 
-```
+```php
 'redis' => [
     'client' => env('REDIS_CLIENT', 'phpredis'),
 ```
@@ -34,7 +34,7 @@ __Проверка зависимостей__
 
 Для того что бы изменить хранилище payload'a джобки, у неё необходимо указать интерфейс `Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload`
 
-```
+```php
 use Umbrellio\LaravelHeavyJobs\Jobs\ShouldStorePayload;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
