@@ -135,7 +135,7 @@ jobs:
           REDIS_HOST: 127.0.0.1
           REDIS_PORT: 6379
         run: |
-          ./vendor/bin/phpunit --verbose --stderr --configuration phpunit.github.xml --coverage-clover build/logs/clover.xml --coverage-text
+          ./vendor/bin/phpunit --stderr --configuration phpunit.github.xml --coverage-clover build/logs/clover.xml --coverage-text
         working-directory: './'
       - name: Upload coverage results to Coveralls
         if: ${{ !matrix.experimental }}
