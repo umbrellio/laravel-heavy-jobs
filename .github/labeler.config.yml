@@ -1,4 +1,4 @@
-"type:build":
+type:build:
   - ".github/**/*"
   - ".coveralls.yml"
   - "phpunit.github.xml"
@@ -7,27 +7,27 @@
   - "composer.json"
   - "composer.lock"
 
-"type:jobs":
+type:jobs:
   - "src/Jobs/**/*"
 
-"type:stores":
+type:stores:
   - "src/Stores/**/*"
 
-"type:facades":
+type:facades:
   - "src/Facades/**/*"
 
-"type:exceptions":
+type:exceptions:
   - "src/Exceptions/**/*"
 
-"type:decorators":
+type:decorators:
   - "src/Decorators/**/*"
 
-"type:tests":
-  - "tests/**/*"
-  - "phpunit.xml.dist"
-  - "tests.sh"
+type:tests:
+  - 'tests/**/*'
+  - 'phpunit.xml.dist'
+  - 'tests.sh'
 
-"theme:docs":
+theme:docs:
   - "README.md"
   - "LICENSE"
   - "CONTRIBUTING.md"
