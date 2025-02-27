@@ -34,7 +34,7 @@
         "php": "^8.0",
         "ext-json": "*",
         "ext-redis": "*",
-        "laravel/framework": "^9.0|^10.0|^11.0|^12.0"
+        "laravel/framework": "^9.0|^10.0|^11.0"
     },
     "require-dev": {
         "umbrellio/code-style-php": "^1.0",
