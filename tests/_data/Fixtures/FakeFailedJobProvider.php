@@ -34,9 +34,11 @@ final class FakeFailedJobProvider implements FailedJobProviderInterface
         return $this->records[$id] ?? null;
     }
 
-    public function forget($id): void
+    public function forget($id): bool
     {
         unset($this->records[$id]);
+
+        return !array_keys($this->records, $id);
     }
 
     public function flush($hours = null): void
