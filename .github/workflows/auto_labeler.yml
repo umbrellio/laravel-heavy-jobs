@@ -1,14 +1,12 @@
-name: "Auto labeling for a pull request"
+name: "Pull Request Labeler"
 on:
   - pull_request_target
 
 jobs:
   triage:
-    name: "Checking for labels"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/labeler@main
+      - uses: actions/labeler@v4
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          sync-labels: true
-          configuration-path: ".github/labeler.config.yml"
+          configuration-path: .github/labeler.config.yml
