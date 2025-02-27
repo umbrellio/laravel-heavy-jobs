@@ -43,4 +43,9 @@ final class FakeFailedJobProvider implements FailedJobProviderInterface
     {
         $this->records = [];
     }
+
+    public function ids($queue = null)
+    {
+        return array_keys($this->records);
+    }
 }
