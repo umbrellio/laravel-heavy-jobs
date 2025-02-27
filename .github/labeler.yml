@@ -1,5 +1,5 @@
 type:build:
-  - ".github/**/*"
+  - ".gith111ub/**/*"
   - ".coveralls.yml"
   - "phpunit.github.xml"
   - ".gitignore"
