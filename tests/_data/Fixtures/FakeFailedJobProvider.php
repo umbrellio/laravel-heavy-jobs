@@ -38,7 +38,7 @@ final class FakeFailedJobProvider implements FailedJobProviderInterface
     {
         unset($this->records[$id]);
 
-        return !array_keys($this->records, $id);
+        return !array_keys($this->records, $id, true);
     }
 
     public function flush($hours = null): void
