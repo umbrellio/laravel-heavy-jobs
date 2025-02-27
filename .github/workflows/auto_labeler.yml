@@ -1,6 +1,6 @@
 name: "Auto labeling for a pull request"
 on:
-  - workflow_dispatch
+  - pull_request_target
 
 jobs:
   triage:
