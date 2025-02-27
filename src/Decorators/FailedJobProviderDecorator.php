@@ -55,4 +55,9 @@ final class FailedJobProviderDecorator implements FailedJobProviderInterface
 
         $this->failedJobProvider->flush($hours);
     }
+
+    public function ids($queue = null)
+    {
+        $this->failedJobProvider->ids($queue);
+    }
 }
