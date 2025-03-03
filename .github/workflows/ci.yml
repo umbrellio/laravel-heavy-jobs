@@ -34,7 +34,7 @@ jobs:
           extensions: '${{ env.php_extensions }}'
           key: '${{ env.key }}'
       - name: 'Cache extensions'
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: '${{ steps.cache-env.outputs.dir }}'
           key: '${{ steps.cache-env.outputs.key }}'
@@ -65,18 +65,12 @@ jobs:
         operating_system:
           - ubuntu-latest
         redis_version:
-          - '4.0'
           - '5.0'
           - '6.0'
         php_versions:
-          - '8.0'
-        laravel: ['^9.0']
+          - '8.1'
+        laravel: ['^10.0']
         include:
-          - operating_system: ubuntu-latest
-            redis_version: '6.0'
-            php_versions: '8.1'
-            laravel: '^9.0'
-            experimental: false
           - operating_system: ubuntu-latest
             redis_version: '6.0'
             php_versions: '8.2'
@@ -86,6 +80,17 @@ jobs:
             redis_version: '6.0'
             php_versions: '8.3'
             laravel: '^11.0'
+            experimental: false
+          - operating_system: ubuntu-latest
+            redis_version: '6.0'
+            php_versions: '8.3'
+            laravel: '^12.0'
+            experimental: false
+          - operating_system: ubuntu-latest
+            redis_version: '6.0'
+            php_versions: '8.4'
+            laravel: '^12.0'
+            experimental: false
     runs-on: '${{ matrix.operating_system }}'
     services:
       redis:
@@ -111,7 +116,7 @@ jobs:
           extensions: ${{ env.php_extensions }}
           key: '${{ env.key }}'
       - name: 'Cache extensions'
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: '${{ steps.cache-env.outputs.dir }}'
           key: '${{ steps.cache-env.outputs.key }}'
