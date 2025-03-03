@@ -68,7 +68,7 @@ jobs:
           - '5.0'
           - '6.0'
         php_versions:
-          - '8.0'
+          - '8.1'
         laravel: ['^10.0']
         include:
           - operating_system: ubuntu-latest
