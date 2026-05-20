@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\Job;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Testing\Fakes\QueueFake;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
 use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeConditionJob;
@@ -23,18 +24,14 @@ class QueueDecoratorTest extends FunctionalTestCase
         Queue::swap(new QueueDecorator(new QueueFake($this->app)));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function queueWrapHeavyJob(): void
     {
         Queue::push(new FakeJob('foo'));
         Queue::assertPushed(HeavyJob::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function queueWrapHeavyJobCondition(): void
     {
         Queue::push(new FakeConditionJob(false));
@@ -44,9 +41,7 @@ class QueueDecoratorTest extends FunctionalTestCase
         Queue::assertPushed(HeavyJob::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function queueMarkHeavyJob(): void
     {
         Queue::push(new FakeJob('foo'));
@@ -57,9 +52,7 @@ class QueueDecoratorTest extends FunctionalTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function queueNotWrapCommonJob(): void
     {
         $job = Mockery::mock(Job::class);

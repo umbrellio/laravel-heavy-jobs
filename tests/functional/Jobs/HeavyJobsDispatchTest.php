@@ -6,6 +6,7 @@ namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Jobs;
 
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Queue\Events\JobProcessed;
+use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueDecorator;
 use Umbrellio\LaravelHeavyJobs\Decorators\QueueManagerDecorator;
@@ -17,9 +18,7 @@ use Umbrellio\LaravelHeavyJobs\Tests\FunctionalTestCase;
 
 class HeavyJobsDispatchTest extends FunctionalTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function decoratorIntegration(): void
     {
         /** @var QueueManagerDecorator $queueManager */
@@ -28,9 +27,7 @@ class HeavyJobsDispatchTest extends FunctionalTestCase
         $this->assertInstanceOf(QueueDecorator::class, $queueManager->connection());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function storeQueuePayload(): void
     {
         $workName = 'foo';
@@ -50,9 +47,7 @@ class HeavyJobsDispatchTest extends FunctionalTestCase
         FakeJob::dispatch($workName);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function markAsFailed(): void
     {
         HeavyJobsStore::spy()
@@ -65,9 +60,7 @@ class HeavyJobsDispatchTest extends FunctionalTestCase
         FakeFailedJob::dispatch();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function lifetime(): void
     {
         config([
@@ -96,9 +89,7 @@ class HeavyJobsDispatchTest extends FunctionalTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function persistsLifetime(): void
     {
         config([
