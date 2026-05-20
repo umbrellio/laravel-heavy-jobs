@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Decorators;
 
 use Illuminate\Contracts\Queue\Job;
+use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Testing\Fakes\QueueFake;
 use Mockery;
@@ -59,5 +60,41 @@ class QueueDecoratorTest extends FunctionalTestCase
 
         Queue::push($job);
         Queue::assertPushed(get_class($job));
+    }
+
+    #[Test]
+    public function delegatesPendingSize(): void
+    {
+        $innerQueue = Mockery::mock(QueueContract::class);
+        $innerQueue->shouldReceive('pendingSize')->with('default')->once()->andReturn(3);
+
+        $this->assertSame(3, (new QueueDecorator($innerQueue))->pendingSize('default'));
+    }
+
+    #[Test]
+    public function delegatesDelayedSize(): void
+    {
+        $innerQueue = Mockery::mock(QueueContract::class);
+        $innerQueue->shouldReceive('delayedSize')->with('default')->once()->andReturn(2);
+
+        $this->assertSame(2, (new QueueDecorator($innerQueue))->delayedSize('default'));
+    }
+
+    #[Test]
+    public function delegatesReservedSize(): void
+    {
+        $innerQueue = Mockery::mock(QueueContract::class);
+        $innerQueue->shouldReceive('reservedSize')->with('default')->once()->andReturn(1);
+
+        $this->assertSame(1, (new QueueDecorator($innerQueue))->reservedSize('default'));
+    }
+
+    #[Test]
+    public function delegatesCreationTimeOfOldestPendingJob(): void
+    {
+        $innerQueue = Mockery::mock(QueueContract::class);
+        $innerQueue->shouldReceive('creationTimeOfOldestPendingJob')->with('default')->once()->andReturn(1716220800);
+
+        $this->assertSame(1716220800, (new QueueDecorator($innerQueue))->creationTimeOfOldestPendingJob('default'));
     }
 }
