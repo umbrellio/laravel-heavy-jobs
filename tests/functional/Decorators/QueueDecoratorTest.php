@@ -66,7 +66,10 @@ class QueueDecoratorTest extends FunctionalTestCase
     public function delegatesPendingSize(): void
     {
         $innerQueue = Mockery::mock(QueueContract::class);
-        $innerQueue->shouldReceive('pendingSize')->with('default')->once()->andReturn(3);
+        $innerQueue->shouldReceive('pendingSize')
+            ->with('default')
+            ->once()
+            ->andReturn(3);
 
         $this->assertSame(3, (new QueueDecorator($innerQueue))->pendingSize('default'));
     }
@@ -75,7 +78,10 @@ class QueueDecoratorTest extends FunctionalTestCase
     public function delegatesDelayedSize(): void
     {
         $innerQueue = Mockery::mock(QueueContract::class);
-        $innerQueue->shouldReceive('delayedSize')->with('default')->once()->andReturn(2);
+        $innerQueue->shouldReceive('delayedSize')
+            ->with('default')
+            ->once()
+            ->andReturn(2);
 
         $this->assertSame(2, (new QueueDecorator($innerQueue))->delayedSize('default'));
     }
@@ -84,7 +90,10 @@ class QueueDecoratorTest extends FunctionalTestCase
     public function delegatesReservedSize(): void
     {
         $innerQueue = Mockery::mock(QueueContract::class);
-        $innerQueue->shouldReceive('reservedSize')->with('default')->once()->andReturn(1);
+        $innerQueue->shouldReceive('reservedSize')
+            ->with('default')
+            ->once()
+            ->andReturn(1);
 
         $this->assertSame(1, (new QueueDecorator($innerQueue))->reservedSize('default'));
     }
@@ -93,7 +102,10 @@ class QueueDecoratorTest extends FunctionalTestCase
     public function delegatesCreationTimeOfOldestPendingJob(): void
     {
         $innerQueue = Mockery::mock(QueueContract::class);
-        $innerQueue->shouldReceive('creationTimeOfOldestPendingJob')->with('default')->once()->andReturn(1716220800);
+        $innerQueue->shouldReceive('creationTimeOfOldestPendingJob')
+            ->with('default')
+            ->once()
+            ->andReturn(1716220800);
 
         $this->assertSame(1716220800, (new QueueDecorator($innerQueue))->creationTimeOfOldestPendingJob('default'));
     }
