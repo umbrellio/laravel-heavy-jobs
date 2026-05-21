@@ -25,7 +25,27 @@ final class QueueDecorator implements Queue
 
     public function size($queue = null)
     {
-        return $this->queue->size();
+        return $this->queue->size($queue);
+    }
+
+    public function pendingSize($queue = null)
+    {
+        return $this->queue->pendingSize($queue);
+    }
+
+    public function delayedSize($queue = null)
+    {
+        return $this->queue->delayedSize($queue);
+    }
+
+    public function reservedSize($queue = null)
+    {
+        return $this->queue->reservedSize($queue);
+    }
+
+    public function creationTimeOfOldestPendingJob($queue = null)
+    {
+        return $this->queue->creationTimeOfOldestPendingJob($queue);
     }
 
     public function push($job, $data = '', $queue = null)

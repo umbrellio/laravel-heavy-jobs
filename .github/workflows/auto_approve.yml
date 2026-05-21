@@ -6,9 +6,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Label when approved'
-        uses: pullreminders/label-when-approved-action@master
-        env:
-          APPROVALS: "1"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ADD_LABEL: "approved"
-          REMOVE_LABEL: "awaiting review"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const approvals = 1;
+            const addLabel = 'approved';
+            const removeLabel = 'awaiting review';
+
+            const reviews = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            const approvalCount = reviews.data.filter(r => r.state === 'APPROVED').length;
+
+            if (approvalCount >= approvals) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: [addLabel]
+              });
+
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: removeLabel
+              });
+            }

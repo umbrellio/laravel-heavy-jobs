@@ -7,6 +7,7 @@ namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Stores;
 use Illuminate\Redis\Connections\Connection as RedisConnection;
 use Illuminate\Support\Facades\Redis;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\LaravelHeavyJobs\Stores\RedisStore;
 use Umbrellio\LaravelHeavyJobs\Stores\StoreInterface;
 use Umbrellio\LaravelHeavyJobs\Stores\StoreResolver;
@@ -26,9 +27,7 @@ class StoreResolverTest extends FunctionalTestCase
         $this->resolver = $this->app->make(StoreResolver::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function resolveRedis(): void
     {
         Redis::spy()
@@ -39,9 +38,7 @@ class StoreResolverTest extends FunctionalTestCase
         $this->assertInstanceOf(RedisStore::class, $this->resolver->resolve());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function resolveCustomDriver(): void
     {
         $this->app['config']->set('heavy-jobs.driver', 'custom');
@@ -54,9 +51,7 @@ class StoreResolverTest extends FunctionalTestCase
         $this->assertSame($customStore, $this->resolver->resolve());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function resolveStoreCache(): void
     {
         $this->app['config']->set('heavy-jobs.driver', 'custom');

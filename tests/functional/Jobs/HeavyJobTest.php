@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Jobs;
 
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
 use Umbrellio\LaravelHeavyJobs\Jobs\HeavyJob;
 use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeJob;
@@ -11,9 +12,7 @@ use Umbrellio\LaravelHeavyJobs\Tests\FunctionalTestCase;
 
 class HeavyJobTest extends FunctionalTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function jobSerialize(): void
     {
         $fakeJob = new FakeJob('foo');
@@ -32,9 +31,7 @@ class HeavyJobTest extends FunctionalTestCase
         $this->assertInstanceOf(FakeJob::class, $storedJob);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function jobDestructorClearData(): void
     {
         $callback = function ($fakeJob) {

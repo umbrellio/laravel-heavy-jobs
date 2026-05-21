@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\LaravelHeavyJobs\Tests\functional\Facades;
 
 use Illuminate\Queue\Events\JobFailed;
+use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 use Umbrellio\LaravelHeavyJobs\Facades\HeavyJobsStore;
 use Umbrellio\LaravelHeavyJobs\Tests\_data\Fixtures\FakeFailedJob;
@@ -20,9 +21,7 @@ class FailedJobProviderDecoratorTest extends FunctionalTestCase
         $this->app->singleton('queue.failer', FakeFailedJobProvider::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function forget(): void
     {
         $this->app['events']->listen(
@@ -44,9 +43,7 @@ class FailedJobProviderDecoratorTest extends FunctionalTestCase
         $this->assertEmpty(HeavyJobsStore::getFailed($heavyPayloadId));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flush(): void
     {
         $ids = [];
